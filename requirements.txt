@@ -1,0 +1,7 @@
+#CORE
+jango==5.2
+
+#UI
+pillow==11.1.0
+django-adminlte-3==0.1.6
+django-crispy-forms==2.3
