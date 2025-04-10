@@ -23,9 +23,11 @@ from . import views
 #Inclus para que funcione
 from django.urls import include
 
+
 urlpatterns = [
     path('admin/', admin.site.urls),
 
     #Paginas publicas
-    path('', views.v_home, name = "u_home")
+    path('', views.v_login, name = "u_home"),
+    path('inicio/', views.p_inicio, name='inicio')
 ]

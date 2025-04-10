@@ -5,7 +5,11 @@ from apps.cliente.models import m_cliente
 def v_inicio(request):
     return render(request, 'inicio.html', {})
 
-def v_home(request):
+#Paginas publicas
+def v_login(request):
     qClienteTodo = m_cliente.objects.all()
     context = {'clientes':qClienteTodo}
-    return render(request, 'public/public_inicio.html', context)
+    return render(request, 'public/login.html', context)
+
+def p_inicio(request):
+    return render(request, 'public/inicio.html')
