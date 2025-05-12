@@ -1,0 +1,47 @@
+{% extends 'public/base.html' %}
+{% block title %}Agregar Vehículo{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+      <h3 class="fw-bold">Agregar Vehículo</h3>
+      <p class="text-muted mb-0">Completa los datos del vehículo</p>
+    </div>
+    <a href="{% url 'vehiculos' %}" class="btn btn-outline-secondary">
+      <i class="bi bi-arrow-left me-2"></i>Regresar
+    </a>
+  </div>
+
+  <div class="card shadow-sm border-0">
+    <div class="card-body">
+      <form method="POST">
+        {% csrf_token %}
+        <div class="row g-3">
+          <div class="col-md-6">
+            <label for="modelo" class="form-label">Modelo</label>
+            <input type="text" name="modelo" id="modelo" class="form-control">
+          </div>
+          <div class="col-md-6">
+            <label for="placa" class="form-label">Placa</label>
+            <input type="text" name="placa" id="placa" class="form-control">
+          </div>
+          <div class="col-md-6">
+            <label for="cliente" class="form-label">Cliente</label>
+            <select name="cliente" id="cliente" class="form-select">
+              {% for c in clientes %}
+                <option value="{{ c.id }}">{{ c.nombre }}</option>
+              {% endfor %}
+            </select>
+          </div>
+        </div>
+        <div class="mt-4 d-flex justify-content-end">
+          <button type="submit" class="btn btn-danger">
+            <i class="bi bi-plus-circle me-2"></i>Guardar Vehículo
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+{% endblock %}

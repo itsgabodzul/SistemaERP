@@ -1,0 +1,54 @@
+{% extends 'public/base.html' %}
+{% block title %}Vehículos{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+      <h3 class="fw-bold">Vehículos</h3>
+      <p class="text-muted mb-0">Registro y seguimiento de vehículos de clientes</p>
+    </div>
+    <a href="#" class="btn btn-danger"><i class="bi bi-plus-circle me-2"></i>Agregar Vehículo</a>
+  </div>
+
+  <div class="card shadow-sm border-0">
+    <div class="card-body">
+      <div class="table-responsive">
+        <table class="table table-hover align-middle mb-0">
+          <thead class="table-light">
+            <tr>
+              <th><i class="bi bi-car-front-fill"></i> Placa</th>
+              <th><i class="bi bi-person-fill"></i> Cliente</th>
+              <th><i class="bi bi-truck-front"></i> Modelo</th>
+              <th><i class="bi bi-calendar-event-fill"></i> Año</th>
+              <th><i class="bi bi-gear-fill"></i> Acciones</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>YZA-1234</td>
+              <td>Juan Pérez</td>
+              <td>Nissan Versa</td>
+              <td>2020</td>
+              <td>
+                <a href="#" class="btn btn-sm btn-outline-primary"><i class="bi bi-pencil-square"></i></a>
+                <a href="#" class="btn btn-sm btn-outline-danger"><i class="bi bi-trash"></i></a>
+              </td>
+            </tr>
+            <tr>
+              <td>ABC-5678</td>
+              <td>Ana Gómez</td>
+              <td>Chevrolet Aveo</td>
+              <td>2018</td>
+              <td>
+                <a href="#" class="btn btn-sm btn-outline-primary"><i class="bi bi-pencil-square"></i></a>
+                <a href="#" class="btn btn-sm btn-outline-danger"><i class="bi bi-trash"></i></a>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

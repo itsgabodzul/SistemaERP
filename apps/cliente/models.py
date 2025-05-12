@@ -4,8 +4,11 @@ from django.db import models
 class m_cliente(models.Model):
     id_cliente = models.AutoField(primary_key = True, db_column='id_cliente')
 
-    nombre = models.CharField(max_length=250, null=True, verbose_name="Nombre")
-    ap_01 = models.CharField(max_length=250, null=True, verbose_name="Apellido")
+    nombre = models.CharField(max_length=250, null=True, verbose_name="Nombre(s)")
+    ap_01 = models.CharField(max_length=250, null=True, verbose_name="Apellidos")
+    email = models.CharField(max_length=250, null=True, verbose_name="Email")
+    telefono = models.CharField(max_length=10, null=True, verbose_name="Telefono")
+    direccion = models.CharField(max_length=250, null=True, verbose_name="Dirección")
     date_created = models.DateTimeField(auto_now=True, null=True, verbose_name="Creacion")
 
     class Meta:

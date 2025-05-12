@@ -1,0 +1,26 @@
+{% extends 'public/base.html' %}
+{% block title %}Detalle de Orden{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+      <h3 class="fw-bold">Orden #{{ orden.id }}</h3>
+      <p class="text-muted mb-0">Detalles de la orden de trabajo</p>
+    </div>
+    <a href="{% url 'ordenes' %}" class="btn btn-outline-secondary">
+      <i class="bi bi-arrow-left me-2"></i>Regresar
+    </a>
+  </div>
+
+  <div class="card shadow-sm border-0">
+    <div class="card-body">
+      <p><strong>Cliente:</strong> {{ orden.cliente.nombre }}</p>
+      <p><strong>Vehículo:</strong> {{ orden.vehiculo.modelo }}</p>
+      <p><strong>Fecha:</strong> {{ orden.fecha_creacion }}</p>
+      <p><strong>Descripción:</strong></p>
+      <p>{{ orden.descripcion }}</p>
+    </div>
+  </div>
+</div>
+{% endblock %}

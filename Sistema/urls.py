@@ -29,5 +29,12 @@ urlpatterns = [
 
     #Paginas publicas
     path('', views.v_login, name = "u_home"),
-    path('inicio/', views.p_inicio, name='inicio')
+    path('inicio/', views.p_inicio, name='inicio'),
+    path('clientes/', include('apps.cliente.urls')),
+    path('vehiculos/', views.p_vehiculo, name='vehiculos'),
+    path('inventario/', views.p_inventario, name='inventario'),
+    path('orden/', views.p_orden, name='orden'),
+    path('configuracion/perfil/', views.p_perfil, name='perfil'),
+    path('configuracion/', views.p_config, name='config'),
+    path('configuracion/ayuda/', views.p_help, name='help'),
 ]
