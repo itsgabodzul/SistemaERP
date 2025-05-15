@@ -28,5 +28,7 @@ urlpatterns = [
     #Paginas publicas
     path('', views.p_cliente, name='clientes'),
     path('agregar-cliente', views.agregar_cliente, name='agregar_cliente'),
-    path('editar-cliente', views.editar_cliente, name='editar_cliente'),
+    path('editar-cliente/<int:id_cliente>/', views.editar_cliente, name='editar_cliente'),
+    path('ver-cliente/<int:id_cliente>/', views.ver_cliente, name='ver_cliente'),
+    path('eliminar-cliente/', views.eliminar_cliente, name='eliminar_cliente'),
 ]

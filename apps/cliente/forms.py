@@ -4,10 +4,11 @@ from .models import m_cliente
 class ClienteForm(forms.ModelForm):
     class Meta:
         model = m_cliente
-        fields = ['nombre', 'ap_01', 'email', 'telefono', 'direccion']
+        fields = ['nombre', 'ap_01', 'sexo', 'email', 'telefono', 'direccion']
         widgets = {
             'nombre': forms.TextInput(attrs={'class': 'form-control casilla'}),
             'ap_01': forms.TextInput(attrs={'class': 'form-control casilla'}),
+            'sexo': forms.Select(attrs={'class': 'form-select casilla'}),
             'email': forms.EmailInput(attrs={'class': 'form-control casilla'}),
             'telefono': forms.TextInput(attrs={'class': 'form-control casilla'}),
             'direccion': forms.TextInput(attrs={'class': 'form-control casilla'}),

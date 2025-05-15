@@ -15,28 +15,9 @@
 
   <div class="card shadow-sm border-0">
     <div class="card-body">
-      <form method="POST">
+       <form method="POST">
         {% csrf_token %}
-        <!-- Mismos campos que agregar cliente -->
-        <div class="row g-3">
-          <div class="col-md-6">
-            <label for="nombre" class="form-label">Nombre Completo</label>
-            <input type="text" name="nombre" id="nombre" class="form-control" value="{{ cliente.nombre }}">
-          </div>
-          <div class="col-md-6">
-            <label for="correo" class="form-label">Correo Electrónico</label>
-            <input type="email" name="correo" id="correo" class="form-control" value="{{ cliente.correo }}">
-          </div>
-          <div class="col-md-6">
-            <label for="telefono" class="form-label">Teléfono</label>
-            <input type="tel" name="telefono" id="telefono" class="form-control" value="{{ cliente.telefono }}">
-          </div>
-          <div class="col-md-6">
-            <label for="direccion" class="form-label">Dirección</label>
-            <input type="text" name="direccion" id="direccion" class="form-control" value="{{ cliente.direccion }}">
-          </div>
-        </div>
-
+        {{ form.as_p }}
         <div class="mt-4 d-flex justify-content-end">
           <button type="submit" class="btn btn-primary">
             <i class="bi bi-pencil-square me-2"></i>Actualizar Cliente

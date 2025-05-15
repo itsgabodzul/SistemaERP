@@ -1,0 +1,32 @@
+{% extends 'public/base.html' %}
+{% block title %}Ver Cliente{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+      <h3 class="fw-bold">Detalles del Cliente</h3>
+      <p class="text-muted mb-0">Información completa del cliente</p>
+    </div>
+    <a href="{% url 'clientes' %}" class="btn btn-outline-secondary">
+      <i class="bi bi-arrow-left me-2"></i>Regresar
+    </a>
+  </div>
+
+  <div class="card shadow-sm border-0">
+    <div class="card-body">
+      <p><strong>Nombre:</strong> {{ cliente.nombre}} {{cliente.ap_01}}</p>
+      <p><strong>Sexo:</strong> {{ cliente.get_sexo_display}}</p>
+      <p><strong>Correo:</strong> {{ cliente.email }}</p>
+      <p><strong>Teléfono:</strong> {{ cliente.telefono }}</p>
+      <p><strong>Dirección:</strong> {{ cliente.direccion }}</p>
+
+      <div class="mt-4">
+        <a href="{% url 'editar_cliente' cliente.id_cliente %}" class="btn btn-primary">
+          <i class="bi bi-pencil-square me-2"></i>Editar Cliente
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

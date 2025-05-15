@@ -9,6 +9,11 @@
         <h3 class="fw-bold">Clientes</h3>
         <p class="text-muted mb-0">Administración de clientes registrados</p>
       </div>
+      <form class="d-flex" role="search" method="get">
+        <input class="form-control me-2" type="search" name="busca_clienet" placeholder="Buscar..." aria-label="Buscar">
+        <button class="btn btn-primary" type="submit"><i class="bi bi-search"></i></button>
+      </form>
+
       <a href="{% url 'agregar_cliente' %}" class="btn btn-danger"><i class="bi bi-plus-circle me-2"></i>Agregar Cliente</a>
     </div>
 
@@ -34,12 +39,22 @@
     <td>{{ cliente.telefono }}</td>
     <td>{{ cliente.direccion }}</td>
     <td>
-      <a href="{% url 'agregar_cliente' %}" class="btn btn-sm btn-outline-primary">
+      <a href="{% url 'ver_cliente' cliente.id_cliente %}" class="btn btn-sm btn-outline-success">
+          <i class="bi bi-eye"></i>
+      </a>
+      <a href="{% url 'editar_cliente' cliente.id_cliente %}" class="btn btn-sm btn-outline-primary">
         <i class="bi bi-pencil-square"></i>
       </a>
-      <a href="#" class="btn btn-sm btn-outline-danger">
-        <i class="bi bi-trash"></i>
-      </a>
+      <!-- Botón de eliminar -->
+      <form id="form-eliminar-{{ cliente.id_cliente }}" method="POST" action="{% url 'eliminar_cliente' %}" style="display: inline;">
+          {% csrf_token %}
+          <input type="hidden" name="id_cliente" value="{{ cliente.id_cliente }}">
+          <button
+              type="button"
+              class="btn btn-sm btn-outline-danger"
+              onclick="confirmarEliminacion({{ cliente.id_cliente }}, '{{ cliente.nombre|escapejs }}', 'cliente')"
+            ><i class="bi bi-trash"></i></button>
+      </form>
     </td>
   </tr>
   {% empty %}
