@@ -104,6 +104,7 @@
             }).then((result) => {
                 if (result.isConfirmed) {
                     document.getElementById(`form-eliminar-${id}`).submit();
+                     sessionStorage.setItem('mostrarMensajeExito', 'true');
                 }
             });
         }
@@ -117,7 +118,7 @@
 
             if (tipo === 'agregado') icono = 'success';
             else if (tipo === 'actualizado') icono = 'success';
-            else if (tipo === 'eliminado') icono = 'warning';
+            else if (tipo === 'eliminado') icono = 'success';
             else if (tipo === 'error') icono = 'error';
 
             Swal.fire({

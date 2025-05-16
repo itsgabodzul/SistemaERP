@@ -4,7 +4,7 @@ from .models import m_cliente
 class ClienteForm(forms.ModelForm):
     class Meta:
         model = m_cliente
-        fields = ['nombre', 'ap_01', 'sexo', 'email', 'telefono', 'direccion']
+        fields = ['nombre', 'ap_01', 'sexo', 'email', 'telefono', 'direccion'] #Datos del moedlo
         widgets = {
             'nombre': forms.TextInput(attrs={'class': 'form-control casilla'}),
             'ap_01': forms.TextInput(attrs={'class': 'form-control casilla'}),
@@ -12,8 +12,10 @@ class ClienteForm(forms.ModelForm):
             'email': forms.EmailInput(attrs={'class': 'form-control casilla'}),
             'telefono': forms.TextInput(attrs={'class': 'form-control casilla'}),
             'direccion': forms.TextInput(attrs={'class': 'form-control casilla'}),
-        }
+        } #Inputs del formulario
 
+
+#Validaciones del formulario
     def clean_nombre(self):
         nombre = self.cleaned_data.get('nombre', '').strip()
         if not nombre:

@@ -1,52 +1,51 @@
 {% extends 'public/base.html' %}
+<!-- titulo de la página -->
 {% block title %}Agregar Cliente{% endblock %}
 
+<!-- Bloque de contenido -->
 {% block content %}
+<!-- Estilos personalizados -->
 <style>
     .casilla{
         border: 1px solid;
         padding: 10px;
-        /* box-shadow: 5px 5px 10px #D32F2F; */
     }
 </style>
 <div class="container-fluid">
   <!-- Encabezado -->
-  <div class="d-flex justify-content-between align-items-center mb-4">
-    <div>
-      <h3 class="fw-bold">Agregar Cliente</h3>
-      <p class="text-muted mb-0">Completa el siguiente formulario para registrar un nuevo cliente</p>
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+          <h3 class="fw-bold">Agregar Cliente</h3>
+          <p class="text-muted mb-0">Completa el siguiente formulario para registrar un nuevo cliente</p>
+        </div>
+        <a href="{% url 'clientes' %}" class="btn btn-outline-secondary"><i class="bi bi-arrow-left me-2"></i>Regresar</a>
     </div>
-    <a href="{% url 'clientes' %}" class="btn btn-outline-secondary">
-      <i class="bi bi-arrow-left me-2"></i>Regresar
-    </a>
-  </div>
-
-  <!-- Formulario -->
-  <div class="card shadow-sm border-0">
-    <div class="card-body">
-      <form method="POST" novalidate>
-  {% csrf_token %}
-  {{ form.non_field_errors }}
-  <div class="row g-3">
-    {% for field in form %}
-    <div class="col-md-6">
-      <label for="{{ field.id_for_label }}" class="form-label">{{ field.label }}</label>
-      {{ field }}
-      {% if field.errors %}
-        <div class="text-danger">{{ field.errors|striptags }}</div>
-      {% endif %}
+    <!-- Formulario -->
+    <div class="card shadow-sm border-0">
+        <div class="card-body">
+          <form method="POST" novalidate>
+              {% csrf_token %}
+              {{ form.non_field_errors }}
+              <div class="row g-3">
+                {% for field in form %}
+                  <div class="col-md-6">
+                    <label for="{{ field.id_for_label }}" class="form-label">{{ field.label }}</label> 
+                    <!-- Label que se toma de forms.py -->
+                    {{ field }}
+                    {% if field.errors %}
+                      <!-- Mensaje de error (Validación) -->
+                      <div class="text-danger">{{ field.errors|striptags }}</div>
+                    {% endif %}
+                  </div>
+                {% endfor %}
+              </div>
+              <div class="mt-4 d-flex justify-content-end">
+                <button type="submit" class="btn btn-danger">
+                  <i class="bi bi-save me-2"></i>Guardar Cliente
+                </button>
+              </div>
+          </form>
+        </div>
     </div>
-    {% endfor %}
-  </div>
-  <div class="mt-4 d-flex justify-content-end">
-    <button type="submit" class="btn btn-danger">
-      <i class="bi bi-save me-2"></i>Guardar Cliente
-    </button>
-  </div>
-</form>
-
-
-    </div>
-  </div>
 </div>
 {% endblock %}

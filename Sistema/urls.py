@@ -30,7 +30,7 @@ urlpatterns = [
     #Paginas publicas
     path('', views.v_login, name = "u_home"),
     path('inicio/', views.p_inicio, name='inicio'),
-    path('clientes/', include('apps.cliente.urls')),
+    path('clientes/', include('apps.cliente.urls')), #Incluir las url de las apps
     path('vehiculos/', views.p_vehiculo, name='vehiculos'),
     path('inventario/', views.p_inventario, name='inventario'),
     path('orden/', views.p_orden, name='orden'),

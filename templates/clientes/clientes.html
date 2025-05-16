@@ -1,7 +1,7 @@
   {% extends 'public/base.html' %}
   {% block title %}Clientes{% endblock %}
 
-  {% block content %}
+{% block content %}
   <div class="container-fluid">
     <!-- Encabezado -->
     <div class="d-flex justify-content-between align-items-center mb-4">
@@ -9,11 +9,16 @@
         <h3 class="fw-bold">Clientes</h3>
         <p class="text-muted mb-0">Administración de clientes registrados</p>
       </div>
-      <form class="d-flex" role="search" method="get">
-        <input class="form-control me-2" type="search" name="busca_clienet" placeholder="Buscar..." aria-label="Buscar">
-        <button class="btn btn-primary" type="submit"><i class="bi bi-search"></i></button>
+      <!-- Barra de busqueda -->
+      <form class="d-flex" method="get" action="{% url 'clientes' %}">
+          <input class="form-control me-2" type="search" name="busca_cliente" placeholder="Buscar..." aria-label="Buscar" value="{{ query|default:'' }}">
+          {% if query %}
+            <a class="btn btn-primary" href="{% url 'clientes' %}"> <i class="bi bi-x-lg"></i></a>
+          {% else %}
+            <button class="btn btn-primary" type="submit"><i class="bi bi-search"></i></button>
+          {% endif %}
       </form>
-
+      <!-- Boton de Agregar -->
       <a href="{% url 'agregar_cliente' %}" class="btn btn-danger"><i class="bi bi-plus-circle me-2"></i>Agregar Cliente</a>
     </div>
 
@@ -22,6 +27,7 @@
       <div class="card-body">
         <div class="table-responsive">
           <table class="table table-hover align-middle mb-0">
+            <!-- Fila encabelzado -->
             <thead class="table-light">
               <tr>
                 <th scope="col"><i class="bi bi-person-fill"></i> Nombre</th>
@@ -31,42 +37,37 @@
                 <th scope="col"><i class="bi bi-gear-fill"></i> Acciones</th>
               </tr>
             </thead>
+            <!-- Filas de contenido -->
             <tbody>
-  {% for cliente in clientes %}
-  <tr>
-    <td>{{ cliente.nombre }} {{ cliente.ap_01 }}</td>
-    <td>{{ cliente.email }}</td>
-    <td>{{ cliente.telefono }}</td>
-    <td>{{ cliente.direccion }}</td>
-    <td>
-      <a href="{% url 'ver_cliente' cliente.id_cliente %}" class="btn btn-sm btn-outline-success">
-          <i class="bi bi-eye"></i>
-      </a>
-      <a href="{% url 'editar_cliente' cliente.id_cliente %}" class="btn btn-sm btn-outline-primary">
-        <i class="bi bi-pencil-square"></i>
-      </a>
-      <!-- Botón de eliminar -->
-      <form id="form-eliminar-{{ cliente.id_cliente }}" method="POST" action="{% url 'eliminar_cliente' %}" style="display: inline;">
-          {% csrf_token %}
-          <input type="hidden" name="id_cliente" value="{{ cliente.id_cliente }}">
-          <button
-              type="button"
-              class="btn btn-sm btn-outline-danger"
-              onclick="confirmarEliminacion({{ cliente.id_cliente }}, '{{ cliente.nombre|escapejs }}', 'cliente')"
-            ><i class="bi bi-trash"></i></button>
-      </form>
-    </td>
-  </tr>
-  {% empty %}
-  <tr>
-    <td colspan="5" class="text-center">No hay clientes registrados.</td>
-  </tr>
-  {% endfor %}
-</tbody>
-
+            {% for cliente in clientes %}
+              <tr>
+                <td>{{ cliente.nombre }} {{ cliente.ap_01 }}</td>
+                <td>{{ cliente.email }}</td>
+                <td>{{ cliente.telefono }}</td>
+                <td>{{ cliente.direccion }}</td>
+                <td>
+                  <!-- Botom de Ver -->
+                  <a href="{% url 'ver_cliente' cliente.id_cliente %}" class="btn btn-sm btn-outline-success"><i class="bi bi-eye"></i></a>
+                  <!-- Botom de Editar -->
+                  <a href="{% url 'editar_cliente' cliente.id_cliente %}" class="btn btn-sm btn-outline-primary"><i class="bi bi-pencil-square"></i></a>
+                  <!-- Botón de eliminar -->
+                  <form id="form-eliminar-{{ cliente.id_cliente }}" method="POST" action="{% url 'eliminar_cliente' %}" style="display: inline;">
+                    {% csrf_token %}
+                    <input type="hidden" name="id_cliente" value="{{ cliente.id_cliente }}">
+                    <button type="button"class="btn btn-sm btn-outline-danger"
+                    onclick="confirmarEliminacion({{ cliente.id_cliente }}, '{{ cliente.nombre|escapejs }}', 'cliente')"><i class="bi bi-trash"></i></button>
+                  </form>
+                </td>
+              </tr>
+            {% empty %}
+              <tr>
+                <td colspan="5" class="text-center">No hay clientes registrados.</td>
+              </tr>
+            {% endfor %}
+            </tbody>
           </table>
         </div>
       </div>
     </div>
   </div>
-  {% endblock %}
+{% endblock %}
