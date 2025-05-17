@@ -46,6 +46,7 @@ THIRD_APPS = [
 
 LOCAL_APPS = [
     'apps.cliente',
+    'apps.inventario',
 ]
 
 INSTALLED_APPS = THIRD_APPS + BASE_APPS + LOCAL_APPS
