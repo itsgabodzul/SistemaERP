@@ -32,7 +32,7 @@ urlpatterns = [
     path('inicio/', views.p_inicio, name='inicio'),
     path('clientes/', include('apps.cliente.urls')), #Incluir las url de las apps
     path('vehiculos/', views.p_vehiculo, name='vehiculos'),
-    path('inventario/', views.p_inventario, name='inventario'),
+    path('inventario/', include('apps.inventario.urls')),
     path('orden/', views.p_orden, name='orden'),
     path('configuracion/perfil/', views.p_perfil, name='perfil'),
     path('configuracion/', views.p_config, name='config'),

@@ -1,43 +1,51 @@
 {% extends 'public/base.html' %}
+<!-- titulo de la página -->
 {% block title %}Agregar Producto{% endblock %}
 
+<!-- Bloque de contenido -->
 {% block content %}
+<!-- Estilos personalizados -->
+<style>
+    .casilla{
+        border: 1px solid;
+        padding: 10px;
+    }
+</style>
 <div class="container-fluid">
-  <div class="d-flex justify-content-between align-items-center mb-4">
-    <div>
-      <h3 class="fw-bold">Agregar Producto</h3>
-      <p class="text-muted mb-0">Ingresa un nuevo producto al inventario</p>
-    </div>
-    <a href="{% url 'productos' %}" class="btn btn-outline-secondary">
-      <i class="bi bi-arrow-left me-2"></i>Regresar
-    </a>
-  </div>
-
-  <div class="card shadow-sm border-0">
-    <div class="card-body">
-      <form method="POST">
-        {% csrf_token %}
-        <div class="row g-3">
-          <div class="col-md-6">
-            <label for="nombre" class="form-label">Nombre del Producto</label>
-            <input type="text" name="nombre" id="nombre" class="form-control">
-          </div>
-          <div class="col-md-3">
-            <label for="precio" class="form-label">Precio</label>
-            <input type="number" step="0.01" name="precio" id="precio" class="form-control">
-          </div>
-          <div class="col-md-3">
-            <label for="stock" class="form-label">Stock</label>
-            <input type="number" name="stock" id="stock" class="form-control">
-          </div>
+  <!-- Encabezado -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+          <h3 class="fw-bold">Agregar Producto</h3>
+          <p class="text-muted mb-0">Ingrese un nuevo producto al inventario</p>
         </div>
-        <div class="mt-4 d-flex justify-content-end">
-          <button type="submit" class="btn btn-danger">
-            <i class="bi bi-box-seam me-2"></i>Guardar Producto
-          </button>
-        </div>
-      </form>
+        <a href="{% url 'inventario' %}" class="btn btn-outline-primary"><i class="bi bi-arrow-left me-2"></i>Regresar</a>
     </div>
-  </div>
+    <!-- Formulario -->
+    <div class="card shadow-sm border-0">
+        <div class="card-body">
+          <form method="POST" novalidate>
+              {% csrf_token %}
+              {{ form.non_field_errors }}
+              <div class="row g-3">
+                {% for field in form %}
+                  <div class="col-md-6">
+                    <label for="{{ field.id_for_label }}" class="form-label">{{ field.label }}</label> 
+                    <!-- Label que se toma de forms.py -->
+                    {{ field }}
+                    {% if field.errors %}
+                      <!-- Mensaje de error (Validación) -->
+                      <div class="text-danger">{{ field.errors|striptags }}</div>
+                    {% endif %}
+                  </div>
+                {% endfor %}
+              </div>
+              <div class="mt-4 d-flex justify-content-end">
+                <button type="submit" class="btn btn-success">
+                  <i class="bi bi-save me-2"></i>Guardar Producto
+                </button>
+              </div>
+          </form>
+        </div>
+    </div>
 </div>
 {% endblock %}

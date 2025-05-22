@@ -1,0 +1,41 @@
+{% extends 'public/base.html' %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="card shadow-sm">
+        <div class="card-header bg-light">
+            <h4 class="mb-0">
+                <i class="bi bi-box-seam"></i> Actualizar Stock
+            </h4>
+        </div>
+        <div class="card-body">
+            <form method="post">
+                {% csrf_token %}
+                <div class="mb-3">
+                    <label class="form-label">Producto:</label>
+                    <input type="text" class="form-control" value="{{ producto.nombre_p }}" readonly>
+                </div>
+                
+                <div class="mb-3">
+                    <label for="stock" class="form-label">Cantidad a agregar:</label>
+                    <input type="number" 
+                           id="stock" 
+                           name="stock" 
+                           class="form-control" 
+                           min="0"
+                           required>
+                </div>
+                
+                <div class="d-flex justify-content-between">
+                    <a href="{% url 'inventario' %}" class="btn btn-danger">
+                        <i class="bi bi-arrow-left"></i> Cancelar
+                    </a>
+                    <button type="submit" class="btn btn-success">
+                        <i class="bi bi-check-circle"></i> Agregar
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

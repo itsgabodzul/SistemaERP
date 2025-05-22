@@ -40,8 +40,9 @@ BASE_APPS = [
 ]
 
 THIRD_APPS = [
-    'adminlte3',
-    'adminlte3_theme',
+    'jazzmin',
+    # 'adminlte3',
+    # 'adminlte3_theme',
 ]
 
 LOCAL_APPS = [

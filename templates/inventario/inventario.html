@@ -9,15 +9,29 @@
       <p class="text-muted mb-0">Control de productos, herramientas y refacciones</p>
     </div>
     <!-- Barra de busqueda -->
-    <form class="d-flex" method="get" action="">
-        <input class="form-control me-2" type="search" name="" placeholder="Buscar..." aria-label="Buscar" value="{{ query|default:'' }}">
+    <form class="d-flex" method="get" action="{% url 'inventario' %}">
+        <input class="form-control me-2" type="search" name="busca_producto" placeholder="Buscar..." aria-label="Buscar" value="{{ query|default:'' }}">
         {% if query %}
-          <a class="btn btn-danger" href=""> <i class="bi bi-x-lg"></i></a>
+          <a class="btn btn-danger" href="{% url 'inventario' %}"> <i class="bi bi-x-lg"></i></a>
         {% else %}
           <button class="btn btn-primary" type="submit"><i class="bi bi-search"></i></button>
         {% endif %}
     </form>
-    <a href="#" class="btn btn-success"><i class="bi bi-plus-circle me-2"></i>Agregar Producto</a>
+    <form method="get" action="" class="me-2">
+    {% if solo_minimos %}
+      <input type="hidden" name="solo_minimos" value="0">
+      <button class="btn btn-success" type="submit">
+        <i class="bi bi-list-ul"></i> Ver todos
+      </button>
+    {% else %}
+      <input type="hidden" name="solo_minimos" value="1">
+      <button class="btn btn-warning position-relative" type="submit">
+        <i class="bi bi-exclamation-triangle-fill"></i>
+        Stock bajo ({{ total_minimos }})
+      </button>
+    {% endif %}
+  </form>
+    <a href="{% url 'agregar_producto' %}" class="btn btn-success"><i class="bi bi-plus-circle me-2"></i>Agregar Producto</a>
   </div>
 
   <div class="card shadow-sm border-0">
@@ -34,17 +48,47 @@
             </tr>
           </thead>
           <tbody>
-            <tr>
-              <td>Filtro de aceite</td>
-              <td>Motor</td>
-              <td>25</td>
-              <td>$120.00</td>
-              <td>
-                <a href="#" class="btn btn-sm btn-outline-primary"><i class="bi bi-pencil-square"></i></a>
-                <a href="#" class="btn btn-sm btn-outline-danger"><i class="bi bi-trash"></i></a>
-              </td>
-            </tr>
-          </tbody>
+            {% for producto in productos %}
+              <tr class="{% if producto.stock <= stock_minimo %}table-warning{% endif %}">
+                <td>
+                  {% if producto.stock <= stock_minimo %}
+                    <span class="badge bg-warning ms-2"><i class="bi bi-exclamation-lg"></i></span> {{ producto.nombre_p }}
+                  {%else%}
+                  {{ producto.nombre_p }}
+                  {% endif %}
+                </td>
+                <td>{{ producto.categoria }}</td>
+                <td>
+                  {{ producto.stock }}
+                </td>
+                <td>${{ producto.precio }}</td>
+                <td>
+                  <!-- Botom de Ver -->
+                  <a href="{% url 'ver_producto' producto.id_producto %}" class="btn btn-sm btn-outline-success"><i class="bi bi-eye"></i></a>
+                  <!-- Botom de Editar -->
+                  <a href="{% url 'editar_producto' producto.id_producto %}" class="btn btn-sm btn-outline-primary"><i class="bi bi-pencil-square"></i></a>
+                  <!-- Botón de eliminar -->
+                  <form id="form-eliminar-{{ producto.id_producto }}" method="POST" action="{% url 'eliminar_producto' %}" style="display: inline;">
+                      {% csrf_token %}
+                      <input type="hidden" name="id_producto" value="{{ producto.id_producto }}">
+                      <button type="button" 
+                              class="btn btn-sm btn-outline-danger"
+                              onclick="confirmarEliminacion(
+                                  {{ producto.id_producto }}, 
+                                  '{{ producto.nombre_p|escapejs }}', 
+                                  'producto'
+                              )">
+                          <i class="bi bi-trash"></i>
+                      </button>
+                  </form>
+                </td>
+              </tr>
+            {% empty %}
+              <tr>
+                <td colspan="5" class="text-center">No hay registro de productos.</td>
+              </tr>
+            {% endfor %}
+            </tbody>
         </table>
       </div>
     </div>

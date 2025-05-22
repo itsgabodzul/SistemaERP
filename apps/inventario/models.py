@@ -16,9 +16,10 @@ class m_inventario(models.Model):
         verbose_name = "Producto"
         verbose_name_plural = "Productos"
 
+
     #Como se muestra en el admin
     def __str__(self):
-        return '%s %s' % (self.nombre_p)
+        return self.nombre_p
 
 
 class Categoria(models.Model):

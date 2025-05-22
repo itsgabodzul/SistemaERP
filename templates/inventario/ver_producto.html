@@ -1,0 +1,28 @@
+{% extends 'public/base.html' %}
+{% block title %}Ver Cliente{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+      <h3 class="fw-bold">Detalles del Producto</h3>
+      <p class="text-muted mb-0">Información completa del producto</p>
+    </div>
+    <a href="{% url 'inventario' %}" class="btn btn-outline-primary"><i class="bi bi-arrow-left me-2"></i>Regresar</a>
+  </div>
+
+  <div class="card shadow-sm border-0">
+    <div class="card-body">
+      <p><strong>Nombre:</strong> {{ producto.nombre_p}}</p>
+      <p><strong>Descripcion:</strong> {{ producto.descripcion}}</p>
+      <p><strong>Categoria:</strong> {{ producto.categoria }}</p>
+      <p><strong>Stock:</strong> {{ producto.stock}}</p>
+      <p><strong>Precio:</strong> ${{ producto.precio }}</p>
+      <div class="mt-4">
+        <a href="{% url 'editar_producto' producto.id_producto %}" class="btn btn-primary"><i class="bi bi-pencil-square me-2"></i>Editar Producto</a>
+        <a href="{% url 'actualizar_stock' producto.id_producto %}" class="btn btn-success"><i class="bi bi-plus-circle me-2"></i>Agregar Stock</a>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
