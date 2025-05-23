@@ -22,6 +22,7 @@ from . import views
 
 #Inclus para que funcione
 from django.urls import include
+from apps.vehiculo.views import ClienteAutocomplete
 
 
 urlpatterns = [
@@ -31,10 +32,12 @@ urlpatterns = [
     path('', views.v_login, name = "u_home"),
     path('inicio/', views.p_inicio, name='inicio'),
     path('clientes/', include('apps.cliente.urls')), #Incluir las url de las apps
-    path('vehiculos/', views.p_vehiculo, name='vehiculos'),
+    path('vehiculos/',include('apps.vehiculo.urls')),
     path('inventario/', include('apps.inventario.urls')),
-    path('orden/', views.p_orden, name='orden'),
+    path('orden-de-trabajo/', views.p_orden, name='orden'),
     path('configuracion/perfil/', views.p_perfil, name='perfil'),
     path('configuracion/', views.p_config, name='config'),
     path('configuracion/ayuda/', views.p_help, name='help'),
+    path('cliente-autocomplete/', ClienteAutocomplete.as_view(), name='cliente-autocomplete'),
+    # path('select2/', include('django_select2.urls')),
 ]

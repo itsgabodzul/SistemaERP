@@ -3,6 +3,7 @@ from django.contrib import messages
 from django.db.models import Q
 from apps.cliente.models import m_cliente
 from apps.inventario.models import m_inventario
+from apps.vehiculo.models import m_vehiculo
 
 
 #Paginas privadas
@@ -17,6 +18,7 @@ def v_login(request):
 
 def p_inicio(request):
     total_clientes = m_cliente.objects.count()
+    total_vehiculos = m_vehiculo.objects.count()
     productos = m_inventario.objects.all()
     stock_minimo = 5
 
@@ -25,15 +27,11 @@ def p_inicio(request):
 
     context ={
         'total_clientes': total_clientes ,
+        'total_vehiculos': total_vehiculos ,
         'total_minimos': total_minimos
     }
     return render(request, 'public/inicio.html', context)
 
-def p_vehiculo(request):
-    return render(request, 'vehiculos/vehiculos.html')
-
-def p_inventario(request):
-    return render(request, 'inventario/inventario.html')
 
 def p_orden(request):
     return render(request, 'ordenes/ordenes.html')

@@ -54,7 +54,8 @@
                   {% if producto.stock <= stock_minimo %}
                     <span class="badge bg-warning ms-2"><i class="bi bi-exclamation-lg"></i></span> {{ producto.nombre_p }}
                   {%else%}
-                  {{ producto.nombre_p }}
+                  <a href="{% url 'ver_producto' producto.id_producto %}" class="text">{{ producto.nombre_p }}</a>
+                  
                   {% endif %}
                 </td>
                 <td>{{ producto.categoria }}</td>

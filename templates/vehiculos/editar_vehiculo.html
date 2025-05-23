@@ -8,7 +8,7 @@
       <h3 class="fw-bold">Editar Vehículo</h3>
       <p class="text-muted mb-0">Modifica los datos del vehículo</p>
     </div>
-    <a href="{% url 'vehiculos' %}" class="btn btn-outline-secondary">
+    <a href="{% url 'vehiculos' %}" class="btn btn-outline-primary">
       <i class="bi bi-arrow-left me-2"></i>Regresar
     </a>
   </div>
@@ -17,31 +17,9 @@
     <div class="card-body">
       <form method="POST">
         {% csrf_token %}
-        <div class="row g-3">
-          <div class="col-md-6">
-            <label for="marca" class="form-label">Marca</label>
-            <input type="text" name="marca" id="marca" class="form-control" value="{{ vehiculo.marca }}">
-          </div>
-          <div class="col-md-6">
-            <label for="modelo" class="form-label">Modelo</label>
-            <input type="text" name="modelo" id="modelo" class="form-control" value="{{ vehiculo.modelo }}">
-          </div>
-          <div class="col-md-6">
-            <label for="anio" class="form-label">Año</label>
-            <input type="number" name="anio" id="anio" class="form-control" value="{{ vehiculo.anio }}">
-          </div>
-          <div class="col-md-6">
-            <label for="placa" class="form-label">Placa</label>
-            <input type="text" name="placa" id="placa" class="form-control" value="{{ vehiculo.placa }}">
-          </div>
-          <div class="col-md-6">
-            <label for="color" class="form-label">Color</label>
-            <input type="text" name="color" id="color" class="form-control" value="{{ vehiculo.color }}">
-          </div>
-        </div>
-
+        {{ form.as_p }}
         <div class="mt-4 d-flex justify-content-end">
-          <button type="submit" class="btn btn-primary">
+          <button type="submit" class="btn btn-success">
             <i class="bi bi-pencil-square me-2"></i>Actualizar Vehículo
           </button>
         </div>

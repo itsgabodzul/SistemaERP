@@ -41,6 +41,9 @@ BASE_APPS = [
 
 THIRD_APPS = [
     'jazzmin',
+    'dal',
+    'dal_select2',
+    # 'django_select2',
     # 'adminlte3',
     # 'adminlte3_theme',
 ]
@@ -48,6 +51,8 @@ THIRD_APPS = [
 LOCAL_APPS = [
     'apps.cliente',
     'apps.inventario',
+    'apps.vehiculo',
+    'apps.ordenes',
 ]
 
 INSTALLED_APPS = THIRD_APPS + BASE_APPS + LOCAL_APPS

@@ -8,7 +8,7 @@
       <h3 class="fw-bold">Vehículos</h3>
       <p class="text-muted mb-0">Registro y seguimiento de vehículos de clientes</p>
     </div>
-    <a href="#" class="btn btn-danger"><i class="bi bi-plus-circle me-2"></i>Agregar Vehículo</a>
+    <a href="{% url 'agregar_vehiculo' %}" class="btn btn-success"><i class="bi bi-plus-circle me-2"></i>Agregar Vehículo</a>
   </div>
 
   <div class="card shadow-sm border-0">
@@ -24,28 +24,40 @@
               <th><i class="bi bi-gear-fill"></i> Acciones</th>
             </tr>
           </thead>
-          <tbody>
-            <tr>
-              <td>YZA-1234</td>
-              <td>Juan Pérez</td>
-              <td>Nissan Versa</td>
-              <td>2020</td>
-              <td>
-                <a href="#" class="btn btn-sm btn-outline-primary"><i class="bi bi-pencil-square"></i></a>
-                <a href="#" class="btn btn-sm btn-outline-danger"><i class="bi bi-trash"></i></a>
-              </td>
-            </tr>
-            <tr>
-              <td>ABC-5678</td>
-              <td>Ana Gómez</td>
-              <td>Chevrolet Aveo</td>
-              <td>2018</td>
-              <td>
-                <a href="#" class="btn btn-sm btn-outline-primary"><i class="bi bi-pencil-square"></i></a>
-                <a href="#" class="btn btn-sm btn-outline-danger"><i class="bi bi-trash"></i></a>
-              </td>
-            </tr>
-          </tbody>
+           <tbody>
+            {% for vehiculo in vehiculos %}
+              <tr>
+                <td>{{ vehiculo.placas }}</td>
+                <td>{{ vehiculo.cliente }}</td>
+                <td>{{ vehiculo.modelo }}</td>
+                <td>{{ vehiculo.anio }}</td>
+                <td>
+                  <!-- Botom de Ver -->
+                  <a href="{% url 'ver_vehiculo' vehiculo.id_vehiculo %}" class="btn btn-sm btn-outline-success"><i class="bi bi-eye"></i></a>
+                  <!-- Botom de Editar -->
+                  <a href="{% url 'editar_vehiculo' vehiculo.id_vehiculo %}" class="btn btn-sm btn-outline-primary"><i class="bi bi-pencil-square"></i></a>
+                  <!-- Botón de eliminar -->
+                  <form id="form-eliminar-{{ vehiuclo.id_vehiculo }}" method="POST" action="{% url 'eliminar_vehiculo' %}" style="display: inline;">
+                      {% csrf_token %}
+                      <input type="hidden" name="id_vehiculo" value="{{ vehiculo.id_vehiculo }}">
+                      <button type="button" 
+                              class="btn btn-sm btn-outline-danger"
+                              onclick="confirmarEliminacion(
+                                  {{ vehiculo.id_vehiculo }}, 
+                                  '{{ vehiculo.marca|escapejs }}', 
+                                  'vehiculo'
+                              )">
+                          <i class="bi bi-trash"></i>
+                      </button>
+                  </form>
+                </td>
+              </tr>
+            {% empty %}
+              <tr>
+                <td colspan="5" class="text-center">No hay vehículos registrados.</td>
+              </tr>
+            {% endfor %}
+            </tbody>
         </table>
       </div>
     </div>

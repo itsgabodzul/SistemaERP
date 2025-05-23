@@ -1,0 +1,76 @@
+from django.shortcuts import render, redirect, get_object_or_404
+from .forms import VehiculoForm
+from django.contrib import messages
+from apps.vehiculo.models import m_vehiculo
+from apps.cliente.models import m_cliente
+from dal import autocomplete
+from django.views.decorators.http import require_POST
+
+# Create your views here.
+class ClienteAutocomplete(autocomplete.Select2QuerySetView):
+    def get_queryset(self):
+        # Todos los clientes al inicio
+        qs = m_cliente.objects.all()
+
+        # Si el usuario está buscando algo (self.q = término de búsqueda)
+        if self.q:
+            qs = qs.filter(nombre__icontains=self.q)  # Busca coincidencias en el nombre
+
+        return qs
+
+
+def p_vehiculo(request):
+    query = request.GET.get('busca_cliente')  # Captura lo que escribió el usuario
+    vehiculos = m_vehiculo.objects.all().order_by('-date_created')
+
+    # if query:
+    #     clientes = clientes.filter(
+    #         Q(nombre__icontains=query) |
+    #         Q(ap_01__icontains=query) |
+    #         Q(email__icontains=query)
+    #     )
+
+    context = {
+        'vehiculos': vehiculos,
+        # 'query': query,  # Para mostrar el valor buscado en el input
+    }
+    return render(request, 'vehiculos/vehiculos.html', context)
+
+
+def agregar_vehiculo(request):
+    if request.method == 'POST':
+        form = VehiculoForm(request.POST) #Para guardar un formulario
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'vehiculo|agregado|Vehiculo agregado correctamente')
+            return redirect('vehiculos') #Redireccionamiento
+    else:
+        form = VehiculoForm()
+
+    return render(request, 'vehiculos/agregar.html',  {'form': form})
+
+
+def ver_vehiculo(request, id_vehiculo):
+    vehiculo = get_object_or_404(m_vehiculo, pk=id_vehiculo) #Para pasar la id
+    return render(request, 'vehiculos/ver_vehiculo.html', {'vehiculo': vehiculo})
+
+def editar_vehiculo(request, id_vehiculo):
+    vehiculo = get_object_or_404(m_vehiculo, pk=id_vehiculo)
+    if request.method == 'POST':
+        form = VehiculoForm(request.POST, instance=vehiculo)
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'vehiculo|actualizado|Vehiculo actualizado correctamente')
+            return redirect('vehiculos')
+    else:
+        form = VehiculoForm(instance=vehiculo)
+    return render(request, 'vehiculos/editar_vehiculo.html', {'form': form, 'vehiculo': vehiculo})
+
+@require_POST
+def eliminar_vehiculo(request):
+    id_vehiculo = request.POST.get('id_vehiculo')
+    producto = get_object_or_404(m_vehiculo, pk=id_vehiculo)
+    producto.delete()
+    messages.success(request, 'vehiculo|eliminado|Vehiculo eliminado correctamente')
+    return redirect('vehiculos')
+
