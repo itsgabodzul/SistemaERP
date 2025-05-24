@@ -34,7 +34,7 @@ urlpatterns = [
     path('clientes/', include('apps.cliente.urls')), #Incluir las url de las apps
     path('vehiculos/',include('apps.vehiculo.urls')),
     path('inventario/', include('apps.inventario.urls')),
-    path('orden-de-trabajo/', views.p_orden, name='orden'),
+    path('orden-de-trabajo/', include('apps.ordenes.urls')),
     path('configuracion/perfil/', views.p_perfil, name='perfil'),
     path('configuracion/', views.p_config, name='config'),
     path('configuracion/ayuda/', views.p_help, name='help'),

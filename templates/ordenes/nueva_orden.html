@@ -1,52 +1,123 @@
 {% extends 'public/base.html' %}
+{% load widget_tweaks %}
 {% block title %}Nueva Orden de Trabajo{% endblock %}
 
 {% block content %}
+<style>
+  .casilla {
+    border: 1px solid;
+    padding: 10px;
+  }
+</style>
+
 <div class="container-fluid">
   <div class="d-flex justify-content-between align-items-center mb-4">
     <div>
       <h3 class="fw-bold">Nueva Orden de Trabajo</h3>
       <p class="text-muted mb-0">Registra los detalles de la orden</p>
     </div>
-    <a href="{% url 'ordenes' %}" class="btn btn-outline-secondary">
+    <a href="{% url 'orden' %}" class="btn btn-outline-primary">
       <i class="bi bi-arrow-left me-2"></i>Regresar
     </a>
   </div>
 
   <div class="card shadow-sm border-0">
     <div class="card-body">
-      <form method="POST">
+      <form method="POST" novalidate>
         {% csrf_token %}
+        {{ form.non_field_errors }}
+
+        <!-- Orden de trabajo -->
         <div class="row g-3">
-          <div class="col-md-6">
-            <label for="cliente" class="form-label">Cliente</label>
-            <select name="cliente" id="cliente" class="form-select">
-              {% for c in clientes %}
-                <option value="{{ c.id }}">{{ c.nombre }}</option>
-              {% endfor %}
-            </select>
-          </div>
-          <div class="col-md-6">
-            <label for="vehiculo" class="form-label">Vehículo</label>
-            <select name="vehiculo" id="vehiculo" class="form-select">
-              {% for v in vehiculos %}
-                <option value="{{ v.id }}">{{ v.modelo }}</option>
-              {% endfor %}
-            </select>
-          </div>
-          <div class="col-md-12">
-            <label for="descripcion" class="form-label">Descripción del trabajo</label>
-            <textarea name="descripcion" id="descripcion" class="form-control" rows="3"></textarea>
-          </div>
+          {% for field in form %}
+            <div class="col-md-6">
+              <label for="{{ field.id_for_label }}" class="form-label">{{ field.label }}</label>
+              {{ field }}
+              {% if field.errors %}
+                <div class="text-danger">{{ field.errors|striptags }}</div>
+              {% endif %}
+            </div>
+          {% endfor %}
         </div>
+
+        <!-- Refacciones -->
+<hr class="my-4">
+<h5 class="fw-bold">Refacciones</h5>
+{{ formset.management_form }}
+
+<div id="formset-container" class="row g-3">
+  {% for form in formset %}
+    <div class="formset-form col-md-6">
+      <div class="border p-3 rounded shadow-sm bg-light position-relative">
+        <div class="row g-2">
+          {% for field in form.visible_fields %}
+            <div class="col-6">
+              <label for="{{ field.id_for_label }}" class="form-label small">{{ field.label }}</label>
+              {{ field|add_class:"form-control-sm" }}
+              {% if field.errors %}
+                <div class="text-danger small">{{ field.errors|striptags }}</div>
+              {% endif %}
+            </div>
+          {% endfor %}
+        </div>
+        <button type="button" class="btn btn-sm btn-outline-danger position-absolute top-0 end-0 m-2 remove-refaccion">
+          <i class="bi bi-x-circle"></i>
+        </button>
+      </div>
+    </div>
+  {% endfor %}
+</div>
+
+
+        <div class="my-3">
+          <button type="button" class="btn btn-outline-secondary" id="add-refaccion">
+            <i class="bi bi-plus-lg me-1"></i>Agregar refacción
+          </button>
+        </div>
+
         <div class="mt-4 d-flex justify-content-end">
-          <button type="submit" class="btn btn-danger">
-            <i class="bi bi-tools me-2"></i>Guardar Orden
+          <button type="submit" class="btn btn-success">
+            <i class="bi bi-save me-2"></i>Guardar Orden
           </button>
         </div>
       </form>
     </div>
   </div>
 </div>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    const formsetContainer = document.getElementById('formset-container');
+    const addBtn = document.getElementById('add-refaccion');
+    let totalForms = document.getElementById('id_form-TOTAL_FORMS');
+
+    addBtn.addEventListener('click', function () {
+      const currentFormCount = parseInt(totalForms.value);
+      const firstForm = document.querySelector('.formset-form');
+      const newForm = firstForm.cloneNode(true);
+
+      // Limpiar campos y actualizar nombres/ids
+      newForm.querySelectorAll('input, select').forEach((input) => {
+        input.value = '';
+        input.name = input.name.replace(/-\d+-/, `-${currentFormCount}-`);
+        input.id = 'id_' + input.name;
+      });
+
+      formsetContainer.appendChild(newForm);
+      totalForms.value = currentFormCount + 1;
+    });
+
+    // Delegación para botón de eliminar
+    formsetContainer.addEventListener('click', function (e) {
+      if (e.target.closest('.remove-refaccion')) {
+        const allForms = document.querySelectorAll('.formset-form');
+        if (allForms.length > 1) {
+          e.target.closest('.formset-form').remove();
+          totalForms.value = document.querySelectorAll('.formset-form').length;
+        }
+      }
+    });
+  });
+</script>
+
 {% endblock %}
-    

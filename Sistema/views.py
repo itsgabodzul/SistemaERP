@@ -33,9 +33,6 @@ def p_inicio(request):
     return render(request, 'public/inicio.html', context)
 
 
-def p_orden(request):
-    return render(request, 'ordenes/ordenes.html')
-
 def p_perfil(request):
     return render(request, 'public/perfil.html')
 
