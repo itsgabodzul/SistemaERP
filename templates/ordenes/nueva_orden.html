@@ -39,42 +39,75 @@
             </div>
           {% endfor %}
         </div>
-
-        <!-- Refacciones -->
-<hr class="my-4">
-<h5 class="fw-bold">Refacciones</h5>
-{{ formset.management_form }}
-
-<div id="formset-container" class="row g-3">
-  {% for form in formset %}
-    <div class="formset-form col-md-6">
-      <div class="border p-3 rounded shadow-sm bg-light position-relative">
-        <div class="row g-2">
-          {% for field in form.visible_fields %}
-            <div class="col-6">
-              <label for="{{ field.id_for_label }}" class="form-label small">{{ field.label }}</label>
-              {{ field|add_class:"form-control-sm" }}
-              {% if field.errors %}
-                <div class="text-danger small">{{ field.errors|striptags }}</div>
-              {% endif %}
+        <!-- Servicios -->
+        <hr class="my-4">
+        <h5 class="fw-bold">Servicios</h5>
+        {{ formset_servicios.management_form }}
+        <div id="formset-container-servicios" class="row g-3">
+          {% for form in formset_servicios %}
+            <div class="formset-form-servicio col-md-6">
+              <div class="border p-3 rounded shadow-sm bg-light position-relative">
+                <div class="row g-2">
+                  {% for field in form.visible_fields %}
+                    {% if field.name != 'DELETE' %}
+                      <div class="col-12">
+                        <label for="{{ field.id_for_label }}" class="form-label small">{{ field.label }}</label>
+                        {{ field|add_class:"form-select form-select-sm" }}
+                        {% if field.errors %}
+                          <div class="text-danger small">{{ field.errors|striptags }}</div>
+                        {% endif %}
+                      </div>
+                    {% endif %}
+                  {% endfor %}
+                </div>
+                <button type="button" class="btn btn-sm btn-outline-danger position-absolute top-0 end-0 m-2 remove-servicio">
+                  <i class="bi bi-x-circle"></i>
+                </button>
+              </div>
             </div>
           {% endfor %}
         </div>
-        <button type="button" class="btn btn-sm btn-outline-danger position-absolute top-0 end-0 m-2 remove-refaccion">
-          <i class="bi bi-x-circle"></i>
-        </button>
-      </div>
-    </div>
-  {% endfor %}
-</div>
+        <div class="my-3">
+          <button type="button" class="btn btn-outline-secondary" id="add-servicio">
+            <i class="bi bi-plus-lg me-1"></i>Agregar servicio
+          </button>
+        </div>
 
 
+        <!-- Refacciones -->
+        <hr class="my-4">
+        <h5 class="fw-bold">Refacciones</h5>
+        {{ formset.management_form }}
+        <div id="formset-container" class="row g-3">
+          {% for form in formset %}
+            <div class="formset-form col-md-6">
+              <div class="border p-3 rounded shadow-sm bg-light position-relative">
+                <div class="row g-2">
+                  {% for field in form.visible_fields %}
+                    {% if field.name != 'DELETE' %}
+                      <div class="col-12">
+                        <label for="{{ field.id_for_label }}" class="form-label small">{{ field.label }}</label>
+                        {{ field|add_class:"form-select form-select-sm" }}
+                        {% if field.errors %}
+                          <div class="text-danger small">{{ field.errors|striptags }}</div>
+                        {% endif %}
+                      </div>
+                    {% endif %}
+                  {% endfor %}
+                </div>
+                <button type="button" class="btn btn-sm btn-outline-danger position-absolute top-0 end-0 m-2 remove-refaccion">
+                  <i class="bi bi-x-circle"></i>
+                </button>
+              </div>
+            </div>
+          {% endfor %}
+        </div>
         <div class="my-3">
           <button type="button" class="btn btn-outline-secondary" id="add-refaccion">
             <i class="bi bi-plus-lg me-1"></i>Agregar refacción
           </button>
         </div>
-
+<!-- Regreso -->
         <div class="mt-4 d-flex justify-content-end">
           <button type="submit" class="btn btn-success">
             <i class="bi bi-save me-2"></i>Guardar Orden
@@ -119,5 +152,43 @@
     });
   });
 </script>
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    const container = document.getElementById('formset-container-servicios');
+    const addBtn = document.getElementById('add-servicio');
+    const totalForms = document.getElementById('id_servicio-TOTAL_FORMS');
+
+    addBtn.addEventListener('click', function () {
+      const currentFormCount = parseInt(totalForms.value);
+      const firstForm = container.querySelector('.formset-form-servicio');
+      const newForm = firstForm.cloneNode(true);
+
+      newForm.querySelectorAll('select').forEach((select) => {
+        const oldName = select.name;
+        const newName = oldName.replace(/servicio-\d+-/, `servicio-${currentFormCount}-`);
+        select.name = newName;
+        select.id = `id_${newName}`;
+        select.selectedIndex = 0;
+      });
+
+      // Elimina posibles errores previos
+      newForm.querySelectorAll('.text-danger').forEach(e => e.remove());
+
+      container.appendChild(newForm);
+      totalForms.value = currentFormCount + 1;
+    });
+
+    container.addEventListener('click', function (e) {
+      if (e.target.closest('.remove-servicio')) {
+        const forms = container.querySelectorAll('.formset-form-servicio');
+        if (forms.length > 1) {
+          e.target.closest('.formset-form-servicio').remove();
+          totalForms.value = container.querySelectorAll('.formset-form-servicio').length;
+        }
+      }
+    });
+  });
+</script>
+
 
 {% endblock %}

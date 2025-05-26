@@ -21,7 +21,7 @@
       <p><strong>Vehiculos del Cliente:</strong></p>
       <ul>
         {% for vehiculo in cliente.vehiculos.all %}
-          <li>{{ vehiculo.marca }} - {{ vehiculo.modelo }}</li>
+          <li><a href="#">{{ vehiculo.marca }} - {{ vehiculo.modelo }}</a></li>
         {% empty %}
           <li>No hay vehículos registrados para este cliente.</li>
         {% endfor %}

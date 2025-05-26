@@ -10,7 +10,20 @@
     </div>
     <a href="{% url 'nueva_orden' %}" class="btn btn-danger"><i class="bi bi-plus-circle me-2"></i>Nueva Orden</a>
   </div>
-
+  <style>
+    .estado{
+      color: #ffffff;
+      padding: 5px;
+      border-radius: 5px;
+      font-weight: bold;
+    }
+    .estado-pendiente {
+      background-color: orange;
+    }
+    .estado-proceso { background-color: blue; }
+    .estado-terminado { background-color: green; }
+    .estado-cancelado { background-color: red; }
+  </style>
   <div class="card shadow-sm border-0">
     <div class="card-body">
       <div class="table-responsive">
@@ -20,35 +33,40 @@
               <th><i class="bi bi-hash"></i> No. Orden</th>
               <th><i class="bi bi-person-fill"></i> Cliente</th>
               <th><i class="bi bi-car-front"></i> Vehículo</th>
-              <th><i class="bi bi-calendar-event"></i> Fecha</th>
+              <th><i class="bi bi-calendar-event"></i> Entrega</th>
               <th><i class="bi bi-check2-circle"></i> Estado</th>
               <th><i class="bi bi-gear-fill"></i> Acciones</th>
             </tr>
           </thead>
-          <tbody>
-            <tr>
-              <td>0001</td>
-              <td>Juan Pérez</td>
-              <td>Nissan Versa</td>
-              <td>2025-04-29</td>
-              <td><span class="badge bg-warning text-dark">En proceso</span></td>
-              <td>
-                <a href="#" class="btn btn-sm btn-outline-primary"><i class="bi bi-eye"></i></a>
-                <a href="#" class="btn btn-sm btn-outline-danger"><i class="bi bi-trash"></i></a>
-              </td>
-            </tr>
-            <tr>
-              <td>0002</td>
-              <td>Ana Gómez</td>
-              <td>Chevrolet Aveo</td>
-              <td>2025-04-28</td>
-              <td><span class="badge bg-success">Finalizado</span></td>
-              <td>
-                <a href="#" class="btn btn-sm btn-outline-primary"><i class="bi bi-eye"></i></a>
-                <a href="#" class="btn btn-sm btn-outline-danger"><i class="bi bi-trash"></i></a>
-              </td>
-            </tr>
-          </tbody>
+           <tbody>
+            {% for orden in ordenes %}
+              <tr>
+                <td>{{ orden.id_orden|stringformat:"05d" }}</td>
+                <td>{{ orden.id_vehiculo.cliente }}</td>
+                <td>{{ orden.id_vehiculo}}</td>
+                <td>{{ orden.entrega_estimada}}</td>
+                <td>
+                  <span class="estado
+                    {% if orden.estado == 'P' %}estado-pendiente
+                    {% elif orden.estado == 'E' %}estado-proceso
+                    {% elif orden.estado == 'T' %}estado-terminado
+                    {% else %}estado-cancelado{% endif %}">
+                  {{ orden.get_estado_display }}
+                  </span>
+                </td>
+                <td>
+                  <!-- Botom de Ver -->
+                  <a href="{% url 'ver_orden' orden.id_orden %}" class="btn btn-sm btn-outline-success"><i class="bi bi-eye"></i></a>
+                  <!-- Botom de Editar -->
+                  <a href="" class="btn btn-sm btn-outline-primary"><i class="bi bi-pencil-square"></i></a>
+                </td>
+              </tr>
+            {% empty %}
+              <tr>
+                <td colspan="5" class="text-center">No hay ordenes registradas.</td>
+              </tr>
+            {% endfor %}
+            </tbody>
         </table>
       </div>
     </div>

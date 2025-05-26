@@ -1,4 +1,5 @@
 from django.db import models
+from django.utils import timezone
 
 # Create your models here.
 class m_inventario(models.Model):
@@ -34,3 +35,18 @@ class Categoria(models.Model):
     
     def __str__(self):
         return self.categoria
+
+#Registro de Inventarios
+class MovimientoInventario(models.Model):
+    TIPO_MOVIMIENTO = [
+        ('entrada', 'Entrada'),
+        ('salida', 'Salida'),
+    ]
+
+    producto = models.ForeignKey('m_inventario', on_delete=models.CASCADE)
+    tipo = models.CharField(max_length=10, choices=TIPO_MOVIMIENTO)
+    cantidad = models.IntegerField()
+    fecha = models.DateTimeField(default=timezone.now)
+
+    def __str__(self):
+        return f'{self.tipo} - {self.producto.nombre} ({self.cantidad})'

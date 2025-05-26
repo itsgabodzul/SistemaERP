@@ -1,5 +1,5 @@
 from django import forms
-from .models import m_orden_trabajo, m_refaccion
+from .models import m_orden_trabajo, m_refaccion, DetalleServicio
 from django.forms import modelformset_factory
 
 
@@ -8,7 +8,6 @@ class OrdenTrabajoForm(forms.ModelForm):
         super().__init__(*args, **kwargs)
         # Etiqueta vacía para selects
         self.fields['id_vehiculo'].empty_label = "Selecciona un vehículo"
-        self.fields['servicio'].empty_label = "Selecciona un servicio"
         self.fields['mecanico'].empty_label = "Selecciona un mecánico (opcional)"
 
         for field in self.fields:
@@ -19,13 +18,12 @@ class OrdenTrabajoForm(forms.ModelForm):
     class Meta:
         model = m_orden_trabajo
         fields = [
-            'id_vehiculo', 'entrega_estimada', 'servicio',
+            'id_vehiculo', 'entrega_estimada',
             'mecanico', 'diagnostico'
         ]
         widgets = {
             'id_vehiculo': forms.Select(attrs={'class': 'form-select casilla'}),
             'entrega_estimada': forms.DateTimeInput(attrs={'type': 'datetime-local', 'class': 'form-control casilla'}),
-            'servicio': forms.Select(attrs={'class': 'form-select casilla'}),
             'mecanico': forms.Select(attrs={'class': 'form-select casilla'}),
             'diagnostico': forms.Textarea(attrs={'class': 'form-control casilla', 'rows': 3}),
         }
@@ -51,11 +49,27 @@ class RefaccionForm(forms.ModelForm):
             raise forms.ValidationError("La cantidad debe ser mayor a cero.")
         return cantidad
 
+class ServicioForm(forms.ModelForm):
+    class Meta:
+        model = DetalleServicio
+        fields = ['servicio']
+        widgets = {
+            'servicio': forms.Select(attrs={'class': 'form-select casilla'})
+        }
+
+
 from django.forms import modelformset_factory
 
 RefaccionFormSet = modelformset_factory(
     m_refaccion,
     form=RefaccionForm,
+    extra=1,  # Una fila por defecto
+    can_delete=True  # Permitir eliminar
+)
+
+ServicioFormSet = modelformset_factory(
+    DetalleServicio,
+    form=ServicioForm,
     extra=1,  # Una fila por defecto
     can_delete=True  # Permitir eliminar
 )

@@ -3,7 +3,8 @@ from .forms import InventarioForm
 from django.views.decorators.http import require_POST
 from django.contrib import messages
 from django.db.models import Q
-from apps.inventario.models import m_inventario
+from django.utils import timezone
+from apps.inventario.models import m_inventario, MovimientoInventario
 
 # Create your views here.
 from django.db.models import Q
@@ -80,16 +81,21 @@ def eliminar_producto(request):
 
 def actualizar_stock(request, id_producto):
     producto = get_object_or_404(m_inventario, pk=id_producto)
-    stock_anterior = producto.stock
+    # stock_anterior = producto.stock
 
     if request.method == 'POST':
         try:
             cantidad_agregada = int(request.POST.get('stock'))
-            if cantidad_agregada < 0:
-                raise ValueError("El stock no puede ser negativo")
+            if cantidad_agregada <= 0:
+                raise ValueError("¡Cantidad invalida! Intentalo de nuevo")
             producto.stock += cantidad_agregada
             producto.save()
-            messages.success(request, 'prodcuto|actualizado|Stock actualizado correctamente')
+            MovimientoInventario.objects.create(
+                    producto=producto,
+                    tipo='entrada',
+                    cantidad=cantidad_agregada,
+                    fecha=timezone.now())
+            messages.success(request, 'prodcuto|actualizado|Stock agregado correctamente')
             return redirect('inventario')
         except ValueError as e:
             messages.error(request, f'Error: {str(e)}')

@@ -55,7 +55,11 @@ def editar_cliente(request, id_cliente):
 #Página de Ver Cliente
 def ver_cliente(request, id_cliente):
     cliente = get_object_or_404(m_cliente, pk=id_cliente) #Para pasar la id
-    return render(request, 'clientes/ver_cliente.html', {'cliente': cliente})
+
+    context = {
+        'cliente': cliente,
+    }
+    return render(request, 'clientes/ver_cliente.html', context)
 
 
 #Eliminar Cliente  (Con Post para mayor seguridad)
