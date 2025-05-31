@@ -4,6 +4,7 @@ from django.db.models import Q
 from apps.cliente.models import m_cliente
 from apps.inventario.models import m_inventario
 from apps.vehiculo.models import m_vehiculo
+from apps.ordenes.models import m_orden_trabajo
 
 
 #Paginas privadas
@@ -19,6 +20,7 @@ def v_login(request):
 def p_inicio(request):
     total_clientes = m_cliente.objects.count()
     total_vehiculos = m_vehiculo.objects.count()
+    ordenes_en_proceso = m_orden_trabajo.objects.filter(estado='E').count()
     productos = m_inventario.objects.all()
     stock_minimo = 5
 
@@ -28,7 +30,8 @@ def p_inicio(request):
     context ={
         'total_clientes': total_clientes ,
         'total_vehiculos': total_vehiculos ,
-        'total_minimos': total_minimos
+        'total_minimos': total_minimos,
+        'ordenes_en_proceso': ordenes_en_proceso,
     }
     return render(request, 'public/inicio.html', context)
 

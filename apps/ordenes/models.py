@@ -33,8 +33,8 @@ class m_orden_trabajo(models.Model):
 
     id_orden = models.AutoField(primary_key=True, db_column='id_orden')
     id_vehiculo = models.ForeignKey(m_vehiculo, on_delete=models.PROTECT, verbose_name="Vehículo")
-    fecha_creacion = models.DateTimeField(auto_now_add=True, verbose_name="Fecha de creación")
-    entrega_estimada = models.DateTimeField(null=True, blank=True, verbose_name="Fecha estimada de entrega")
+    fecha_creacion = models.DateField(auto_now_add=True, verbose_name="Fecha de creación")
+    entrega_estimada = models.DateField(null=True, blank=True, verbose_name="Fecha estimada de entrega")
     mecanico = models.ForeignKey(m_empleado, on_delete=models.SET_NULL, null=True, blank=True,
     verbose_name="Mecánico asignado")
     diagnostico = models.TextField(verbose_name="Diagnóstico inicial")
@@ -133,8 +133,13 @@ class m_refaccion(models.Model):
         return f"{self.cantidad}x {self.producto.nombre_p} para OT#{self.orden.id_orden}"
 
 class DetalleServicio(models.Model):
-    orden = models.ForeignKey('m_orden_trabajo', on_delete=models.CASCADE, related_name='servicios_asociados')
-    servicio = models.ForeignKey('m_servicio', on_delete=models.PROTECT)
+    orden = models.ForeignKey(m_orden_trabajo, on_delete=models.CASCADE, related_name='servicios_asociados')
+    servicio = models.ForeignKey(m_servicio, on_delete=models.PROTECT)
+
+    class Meta:
+        db_table = 'detalle_servicio'
+        verbose_name = "Detalle de Servicio"
+        verbose_name_plural = "Detalles de los servicios"
 
     def save(self, *args, **kwargs):
         is_new = not self.pk
@@ -153,4 +158,4 @@ class DetalleServicio(models.Model):
         return self.servicio.costo
 
     def __str__(self):
-        return f"{self.servicio.nombre} (Orden #{self.orden.id_orden})"
+        return f"{self.servicio} (Orden #{self.orden.id_orden})"

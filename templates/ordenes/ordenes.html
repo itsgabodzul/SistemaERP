@@ -8,6 +8,23 @@
       <h3 class="fw-bold">Órdenes de Trabajo</h3>
       <p class="text-muted mb-0">Seguimiento de órdenes activas, pendientes y finalizadas</p>
     </div>
+    <!-- filtro desplegable -->
+    <div class="mb-3">
+      <form method="get">
+        <select name="estado" class="form-select shadow-sm" style="width: 200px;" onchange="this.form.submit()">
+          <!-- Dinámicamente muestra la selección actual -->
+          {% if not request.GET.estado %}
+            <option value="" selected>Todos los registros</option>
+          {% else %}
+            <option value="">Todos los registros</option>
+          {% endif %}
+          <option value="P" {% if request.GET.estado == 'P' %}selected{% endif %}>Pendientes</option>
+          <option value="E" {% if request.GET.estado == 'E' %}selected{% endif %}>En Proceso</option>
+          <option value="T" {% if request.GET.estado == 'T' %}selected{% endif %}>Terminadas</option>
+          <option value="C" {% if request.GET.estado == 'C' %}selected{% endif %}>Canceladas</option>
+        </select>
+      </form>
+    </div>
     <a href="{% url 'nueva_orden' %}" class="btn btn-danger"><i class="bi bi-plus-circle me-2"></i>Nueva Orden</a>
   </div>
   <style>
@@ -58,7 +75,7 @@
                   <!-- Botom de Ver -->
                   <a href="{% url 'ver_orden' orden.id_orden %}" class="btn btn-sm btn-outline-success"><i class="bi bi-eye"></i></a>
                   <!-- Botom de Editar -->
-                  <a href="" class="btn btn-sm btn-outline-primary"><i class="bi bi-pencil-square"></i></a>
+                  <a href="{% url 'editar_orden' orden.id_orden %}" class="btn btn-sm btn-outline-primary"><i class="bi bi-pencil-square"></i></a>
                 </td>
               </tr>
             {% empty %}

@@ -23,7 +23,7 @@ class OrdenTrabajoForm(forms.ModelForm):
         ]
         widgets = {
             'id_vehiculo': forms.Select(attrs={'class': 'form-select casilla'}),
-            'entrega_estimada': forms.DateTimeInput(attrs={'type': 'datetime-local', 'class': 'form-control casilla'}),
+            'entrega_estimada': forms.DateInput(attrs={'type': 'date', 'class': 'form-control casilla'}),
             'mecanico': forms.Select(attrs={'class': 'form-select casilla'}),
             'diagnostico': forms.Textarea(attrs={'class': 'form-control casilla', 'rows': 3}),
         }

@@ -19,7 +19,9 @@
       <p><strong>Vehículo:</strong> {{ orden.id_vehiculo }}</p>
       <p><strong>Fecha :</strong> {{ orden.fecha_creacion }}</p>
       <p><strong>Entrega :</strong> {{ orden.entrega_estimada }}</p>
-      <p><strong>Servicio:</strong> {{ orden.servicio }}</p>
+      {% for servicio in servicios %}
+      <p><strong>Servicio:</strong> {{ servicio.servicio }}</p>
+      {% endfor %}
       <p><strong>Mecánico:</strong> {{ orden.mecanico }}</p>
       <p><strong>Diagnostico:</strong></p>
       <p>{{ orden.diagnostico }}</p>

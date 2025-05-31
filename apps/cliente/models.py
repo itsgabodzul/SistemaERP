@@ -8,7 +8,8 @@ class m_cliente(models.Model):
     #Campos de la tabla (modelo)
     nombre = models.CharField(max_length=250, null=True, verbose_name="Nombre(s)")
     ap_01 = models.CharField(max_length=250, null=True, verbose_name="Apellidos")
-    SEXO_CHOICES = [('', 'Selecciona'),('M', 'Masculino'),('F', 'Femenino'),]
+    fecha_nacimiento = models.DateField(null=True, verbose_name="Fecha de Nacimiento")
+    SEXO_CHOICES = [('', 'Selecciona una opción'),('M', 'Masculino'),('F', 'Femenino'),]
     sexo = models.CharField(max_length=1, choices=SEXO_CHOICES)
     email = models.CharField(max_length=250, null=True, verbose_name="Email")
     telefono = models.CharField(max_length=10, null=True, verbose_name="Telefono")

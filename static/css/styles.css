@@ -1,0 +1,74 @@
+.top-bar {
+    background-color: #343a40;
+    color: white;
+    padding: 0.7rem 2rem;
+}
+.top-bar .dropdown-toggle {
+    color: white;
+    text-decoration: none;
+}
+.navbar {
+    background-color: #D32F2F;
+}
+.navbar .nav-link {
+    color: white !important;
+}
+.dropdown-item i {
+    width: 30px;
+}
+.dropdown-item.text-danger i {
+    color: red;
+}
+.content-container {
+    margin-top: 20px;
+}
+.row i {
+    color: #B0B0B0;
+}
+.navbar .nav-link.active {
+    font-weight: bold;
+    border-bottom: 2px solid white;
+}
+.muted{
+    color: #6c757d;
+}
+.mycard:hover {
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+    transform: scale(1.1);
+    transition: 0.3s;
+    background-color: #D32F2F;
+    border-radius: 5px;
+}
+.mycard:hover .text{
+    color: white;
+}
+.casilla{
+    border: 1px solid;
+    padding: 10px;
+}
+.regresar{
+    color: #0B5ED7;
+    font-size: 25px;
+    margin-right: 15px;
+}
+.regresar:hover{
+    color: #0B5ED7;
+    transform: scale(1.1);
+    transition: all 0.3s ease;
+}
+.clickable-row {
+    cursor: pointer;
+}
+.fila_autos a{
+    text-decoration: none;
+}
+.card{
+    border: none;
+}
+/*Generales*/
+.prueba{
+    border: red solid;
+}
+.verde{
+    border: green solid;
+}

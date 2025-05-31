@@ -4,7 +4,7 @@ from .forms import ClienteForm
 from django.views.decorators.http import require_POST
 from django.contrib import messages
 from django.db.models import Q
-
+from django.http import JsonResponse
 
 #Definir las vistas de cada pagina
 
@@ -17,7 +17,8 @@ def p_cliente(request):
         clientes = clientes.filter(
             Q(nombre__icontains=query) |
             Q(ap_01__icontains=query) |
-            Q(email__icontains=query)
+            Q(email__icontains=query) |
+            Q(telefono__icontains=query)
         )
 
     context = {
@@ -70,3 +71,14 @@ def eliminar_cliente(request):
     cliente.delete()
     messages.success(request, 'cliente|eliminado|Cliente eliminado correctamente')
     return redirect('clientes')
+
+def cliente_modal(request):
+    if request.method == 'POST':
+        form = ClienteForm(request.POST)
+        if form.is_valid():
+            cliente = form.save()
+            return JsonResponse({'success': True, 'id_cliente': cliente.id, 'nombre': str(cliente)})
+        return render(request, 'clientes/cliente_modal_form.html', {'form': form})
+    else:
+        form = ClienteForm()
+        return render(request, 'clientes/cliente_modal_form.html', {'form': form})

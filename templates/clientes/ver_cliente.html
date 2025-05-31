@@ -3,17 +3,16 @@
 
 {% block content %}
 <div class="container-fluid">
-  <div class="d-flex justify-content-between align-items-center mb-4">
+  <div class="d-flex align-items-center mb-4">
+    <a href="{% url 'clientes' %}" class="btn regresar"><i class="bi bi-arrow-left-circle-fill"></i></a>
     <div>
       <h3 class="fw-bold">Detalles del Cliente</h3>
       <p class="text-muted mb-0">Información completa del cliente</p>
     </div>
-    <a href="{% url 'clientes' %}" class="btn btn-outline-primary"><i class="bi bi-arrow-left me-2"></i>Regresar</a>
   </div>
-
-  <div class="card shadow-sm border-0">
-    <div class="card-body">
+  <div class="card card-body">
       <p><strong>Nombre:</strong> {{ cliente.nombre}} {{cliente.ap_01}}</p>
+      <p><strong>Fecha de Nacimiento:</strong> {{ cliente.fecha_nacimiento}}</p>
       <p><strong>Sexo:</strong> {{ cliente.get_sexo_display}}</p>
       <p><strong>Correo:</strong> {{ cliente.email }}</p>
       <p><strong>Teléfono:</strong> {{ cliente.telefono }}</p>
@@ -21,7 +20,7 @@
       <p><strong>Vehiculos del Cliente:</strong></p>
       <ul>
         {% for vehiculo in cliente.vehiculos.all %}
-          <li><a href="#">{{ vehiculo.marca }} - {{ vehiculo.modelo }}</a></li>
+          <li class="fila_autos"><a href="#">{{ vehiculo.marca }} - {{ vehiculo.modelo }}</a></li>
         {% empty %}
           <li>No hay vehículos registrados para este cliente.</li>
         {% endfor %}
@@ -30,6 +29,5 @@
         <a href="{% url 'editar_cliente' cliente.id_cliente %}" class="btn btn-primary"><i class="bi bi-pencil-square me-2"></i>Editar Cliente</a>
       </div>
     </div>
-  </div>
 </div>
 {% endblock %}

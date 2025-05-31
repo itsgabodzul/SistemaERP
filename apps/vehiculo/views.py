@@ -1,5 +1,6 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from .forms import VehiculoForm
+from django.db.models import Q
 from django.contrib import messages
 from apps.vehiculo.models import m_vehiculo
 from apps.cliente.models import m_cliente
@@ -20,19 +21,25 @@ class ClienteAutocomplete(autocomplete.Select2QuerySetView):
 
 
 def p_vehiculo(request):
-    query = request.GET.get('busca_cliente')  # Captura lo que escribió el usuario
+    query = request.GET.get('busca_vehiculo')  # Captura lo que escribió el usuario
     vehiculos = m_vehiculo.objects.all().order_by('-date_created')
+    clientes = m_cliente.objects.all()
 
-    # if query:
-    #     clientes = clientes.filter(
-    #         Q(nombre__icontains=query) |
-    #         Q(ap_01__icontains=query) |
-    #         Q(email__icontains=query)
-    #     )
+    if query:
+        vehiculos = vehiculos.filter(
+            Q(placas__icontains=query) |
+            Q(cliente__nombre__icontains=query) |
+            Q(cliente__ap_01__icontains=query)
+        )
+        # clientes = clientes.filter(
+        #     Q(nombre__icontains=query) |
+        #     Q(ap_01__icontains=query)
+        # )
 
     context = {
         'vehiculos': vehiculos,
-        # 'query': query,  # Para mostrar el valor buscado en el input
+        # 'clientes': clientes,
+        'query': query,  # Para mostrar el valor buscado en el input
     }
     return render(request, 'vehiculos/vehiculos.html', context)
 
