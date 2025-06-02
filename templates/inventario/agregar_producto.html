@@ -4,21 +4,14 @@
 
 <!-- Bloque de contenido -->
 {% block content %}
-<!-- Estilos personalizados -->
-<style>
-    .casilla{
-        border: 1px solid;
-        padding: 10px;
-    }
-</style>
 <div class="container-fluid">
   <!-- Encabezado -->
-    <div class="d-flex justify-content-between align-items-center mb-4">
+    <div class="d-flex align-items-center mb-4">
+      <a href="{% url 'inventario' %}" class="btn regresar"><i class="bi bi-arrow-left-circle-fill"></i></a>
         <div>
           <h3 class="fw-bold">Agregar Producto</h3>
           <p class="text-muted mb-0">Ingrese un nuevo producto al inventario</p>
         </div>
-        <a href="{% url 'inventario' %}" class="btn btn-outline-primary"><i class="bi bi-arrow-left me-2"></i>Regresar</a>
     </div>
     <!-- Formulario -->
     <div class="card shadow-sm border-0">
@@ -39,12 +32,38 @@
                   </div>
                 {% endfor %}
               </div>
-              <div class="mt-4 d-flex justify-content-end">
+              <div class="mt-4 d-flex justify-content-between">
+                <!-- Botón para abrir el modal -->
+                <button type="button" class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#modalCargarExcel">
+                  <i class="bi bi-upload"></i> Cargar un Archivo
+                </button>
                 <button type="submit" class="btn btn-success">
                   <i class="bi bi-save me-2"></i>Guardar Producto
                 </button>
               </div>
           </form>
+          <!-- Modal -->
+<div class="modal fade" id="modalCargarExcel" tabindex="-1" aria-labelledby="modalCargarExcelLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <form method="POST" action="{% url 'cargar_excel' %}" enctype="multipart/form-data" class="modal-content">
+      {% csrf_token %}
+      <div class="modal-header">
+        <h5 class="modal-title" id="modalCargarExcelLabel">Importar desde Excel</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+      </div>
+      <div class="modal-body">
+        <p>Selecciona un archivo Excel (.xlsx)</p>
+        <input type="file" name="archivo" accept=".xlsx" class="form-control" required>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+        <button type="submit" class="btn btn-primary">
+          <i class="bi bi-upload"></i> Subir archivo
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
         </div>
     </div>
 </div>

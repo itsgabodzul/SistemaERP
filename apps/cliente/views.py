@@ -1,5 +1,6 @@
 from django.shortcuts import render,  redirect, get_object_or_404
 from apps.cliente.models import m_cliente
+from apps.vehiculo.models import m_vehiculo
 from .forms import ClienteForm
 from django.views.decorators.http import require_POST
 from django.contrib import messages
@@ -82,3 +83,8 @@ def cliente_modal(request):
     else:
         form = ClienteForm()
         return render(request, 'clientes/cliente_modal_form.html', {'form': form})
+
+
+def ver_vehiculo_asociado(request, id_vehiculo):
+    vehiculo = get_object_or_404(m_vehiculo, pk=id_vehiculo) #Para pasar la id
+    return render(request, 'vehiculos/ver_vehiculo.html', {'vehiculo': vehiculo})

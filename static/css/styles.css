@@ -61,9 +61,37 @@
 }
 .fila_autos a{
     text-decoration: none;
+    padding: 3px;
+    color: #343a40;
+}
+.fila_autos a:hover{
+    color: #0B5ED7;
+    transition: all 0.2s ease;
 }
 .card{
     border: none;
+}
+.cabecera{
+    background-color: #1c67a8;
+}
+.cont_tablas{
+    height: 380px;
+}
+.casilla:disabled{
+    background-color: #7f7f7f;
+    color: white;
+}
+.refacciones{
+    text-align: center;
+    margin-bottom: 10px;
+}
+.refacciones thead{
+    background-color: #6c757d;
+    color: white;
+}
+.refacciones th, .refacciones td{
+    border: #6c757d solid;
+    padding: 2px 10px;
 }
 /*Generales*/
 .prueba{

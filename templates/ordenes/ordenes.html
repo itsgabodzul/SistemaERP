@@ -43,7 +43,7 @@
   </style>
   <div class="card shadow-sm border-0">
     <div class="card-body">
-      <div class="table-responsive">
+      <div class="table-responsive overflow-auto cont_tablas">
         <table class="table table-hover align-middle mb-0">
           <thead class="table-light">
             <tr>
@@ -55,9 +55,9 @@
               <th><i class="bi bi-gear-fill"></i> Acciones</th>
             </tr>
           </thead>
-           <tbody>
+          <tbody>
             {% for orden in ordenes %}
-              <tr>
+              <tr data-url="{% url 'ver_orden' orden.id_orden %}" class=" clickable-row">
                 <td>{{ orden.id_orden|stringformat:"05d" }}</td>
                 <td>{{ orden.id_vehiculo.cliente }}</td>
                 <td>{{ orden.id_vehiculo}}</td>
@@ -72,8 +72,6 @@
                   </span>
                 </td>
                 <td>
-                  <!-- Botom de Ver -->
-                  <a href="{% url 'ver_orden' orden.id_orden %}" class="btn btn-sm btn-outline-success"><i class="bi bi-eye"></i></a>
                   <!-- Botom de Editar -->
                   <a href="{% url 'editar_orden' orden.id_orden %}" class="btn btn-sm btn-outline-primary"><i class="bi bi-pencil-square"></i></a>
                 </td>

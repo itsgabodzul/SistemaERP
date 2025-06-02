@@ -3,28 +3,52 @@
 
 {% block content %}
 <div class="container-fluid">
-  <div class="d-flex justify-content-between align-items-center mb-4">
+  <div class="d-flex align-items-center mb-4">
+    <a href="{% url 'vehiculos' %}" class="btn regresar"><i class="bi bi-arrow-left-circle-fill"></i></a>
     <div>
       <h3 class="fw-bold">Editar Vehículo</h3>
       <p class="text-muted mb-0">Modifica los datos del vehículo</p>
     </div>
-    <a href="{% url 'vehiculos' %}" class="btn btn-outline-primary">
-      <i class="bi bi-arrow-left me-2"></i>Regresar
-    </a>
   </div>
-
-  <div class="card shadow-sm border-0">
-    <div class="card-body">
-      <form method="POST">
-        {% csrf_token %}
-        {{ form.as_p }}
-        <div class="mt-4 d-flex justify-content-end">
-          <button type="submit" class="btn btn-success">
-            <i class="bi bi-pencil-square me-2"></i>Actualizar Vehículo
-          </button>
-        </div>
-      </form>
+  <div class="card card-body">
+  <form method="POST" novalidate>
+  {% csrf_token %}
+  {{ form.non_field_errors }}
+  <div class="row g-3">
+    {% for field in form %}
+    <div class="col-md-4">
+      <label for="{{ field.id_for_label }}" class="form-label">{{ field.label }}</label>
+      {% if field.name == 'marca' %}
+        <!-- Campo de marca con autocomplete -->
+        <select id="marca" name="marca" class="form-control casilla select2-marca" disabled>
+          {% if field.value %}
+            <option value="{{ field.value }}" selected>{{ field.value }}</option>
+          {% endif %}
+        </select>
+      {% elif field.name == 'modelo' %}
+        <!-- Campo de modelo dependiente -->
+        <select id="modelo" name="modelo" class="form-control casilla select2-modelo" disabled>
+          {% if field.value %}
+            <option value="{{ field.value }}" selected>{{ field.value }}</option>
+          {% else %}
+            <option value="">{% if form.initial.marca %}Seleccione modelo{% else %}Seleccione marca primero{% endif %}</option>
+          {% endif %}
+        </select>
+      {% else %}
+        {{ field }}
+      {% endif %}
+      {% if field.errors %}
+        <div class="text-danger">{{ field.errors|striptags }}</div>
+      {% endif %}
     </div>
+    {% endfor %}
+  </div>
+  <div class="mt-4 d-flex justify-content-end">
+    <button type="submit" class="btn btn-success">
+      <i class="bi bi-pencil-square me-2"></i>Actualizar Vehículo
+    </button>
+  </div>
+</form>
   </div>
 </div>
 {% endblock %}

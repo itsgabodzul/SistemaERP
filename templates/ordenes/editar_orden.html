@@ -3,41 +3,34 @@
 {% block title %}Editar Orden de Trabajo{% endblock %}
 
 {% block content %}
-<style>
-  .casilla {
-    border: 1px solid;
-    padding: 10px;
-  }
-  .casilla:disabled{
-    background-color: #333;
-    color: white;
-  }
-</style>
 
 <div class="container-fluid">
-  <div class="d-flex justify-content-between align-items-center mb-4">
+  <div class="d-flex align-items-center mb-4">
+    <a href="{% url 'orden' %}" class="btn regresar"><i class="bi bi-arrow-left-circle-fill"></i></a>
     <div>
       <h3 class="fw-bold">Editar Orden de Trabajo</h3>
       <p class="text-muted mb-0">Modifica los datos de la orden</p>
     </div>
-    <a href="{% url 'orden' %}" class="btn btn-outline-primary">
-      <i class="bi bi-arrow-left me-2"></i>Regresar
-    </a>
   </div>
 
   <div class="card shadow-sm border-0">
     <div class="card-body">
       <form method="POST" novalidate>
+        {% load widget_tweaks %}
         {% csrf_token %}
         {{ form.non_field_errors }}
-
         <div class="row g-3">
           <!-- Campos editables -->
           {% for field in form %}
             {% if field.name != 'cliente' and field.name != 'vehiculo' %}
               <div class="col-md-6">
                 <label for="{{ field.id_for_label }}" class="form-label">{{ field.label }}</label>
-                {{ field }}
+                {% if field.field.widget.input_type == 'date' %}
+                  <!-- Widget especial para campos de fecha -->
+                  <input type="date" name="{{ field.name }}" id="{{ field.id_for_label }}" value="{{ field.value|date:'Y-m-d' }}" class="form-control casilla">
+                  {% else %}
+                    {{ field|add_class:"form-control" }}
+                  {% endif %}
                 {% if field.errors %}
                   <div class="text-danger">{{ field.errors|striptags }}</div>
                 {% endif %}

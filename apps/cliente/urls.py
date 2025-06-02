@@ -32,4 +32,5 @@ urlpatterns = [
     path('ver-cliente/<int:id_cliente>/', views.ver_cliente, name='ver_cliente'),
     path('eliminar-cliente/', views.eliminar_cliente, name='eliminar_cliente'),
     path('agregar-cliente-modal/', views.cliente_modal, name='cliente_modal'),
+    path('/', include('apps.vehiculo.urls')),
 ]

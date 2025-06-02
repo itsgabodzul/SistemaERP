@@ -18,9 +18,9 @@
       <p><strong>Teléfono:</strong> {{ cliente.telefono }}</p>
       <p><strong>Dirección:</strong> {{ cliente.direccion }}</p>
       <p><strong>Vehiculos del Cliente:</strong></p>
-      <ul>
+      <ul class="lista_autos">
         {% for vehiculo in cliente.vehiculos.all %}
-          <li class="fila_autos"><a href="#">{{ vehiculo.marca }} - {{ vehiculo.modelo }}</a></li>
+          <li class="fila_autos"><a href="{% url 'ver_vehiculo' vehiculo.id_vehiculo %}">{{ vehiculo.marca }} - {{ vehiculo.modelo }}</a></li>
         {% empty %}
           <li>No hay vehículos registrados para este cliente.</li>
         {% endfor %}

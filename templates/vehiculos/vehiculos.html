@@ -32,29 +32,21 @@
               <th><i class="bi bi-gear-fill"></i> Acciones</th>
             </tr>
           </thead>
-           <tbody>
+          <tbody>
             {% for vehiculo in vehiculos %}
-              <tr>
+              <tr class="clickable-row" data-url="{% url 'ver_vehiculo' vehiculo.id_vehiculo %}">
                 <td>{{ vehiculo.placas }}</td>
                 <td>{{ vehiculo.cliente }}</td>
                 <td>{{ vehiculo.modelo }}</td>
                 <td>{{ vehiculo.anio }}</td>
                 <td>
-                  <!-- Botom de Ver -->
-                  <a href="{% url 'ver_vehiculo' vehiculo.id_vehiculo %}" class="btn btn-sm btn-outline-success"><i class="bi bi-eye"></i></a>
                   <!-- Botom de Editar -->
                   <a href="{% url 'editar_vehiculo' vehiculo.id_vehiculo %}" class="btn btn-sm btn-outline-primary"><i class="bi bi-pencil-square"></i></a>
                   <!-- Botón de eliminar -->
                   <form id="form-eliminar-{{ vehiuclo.id_vehiculo }}" method="POST" action="{% url 'eliminar_vehiculo' %}" style="display: inline;">
                       {% csrf_token %}
                       <input type="hidden" name="id_vehiculo" value="{{ vehiculo.id_vehiculo }}">
-                      <button type="button" 
-                              class="btn btn-sm btn-outline-danger"
-                              onclick="confirmarEliminacion(
-                                  {{ vehiculo.id_vehiculo }}, 
-                                  '{{ vehiculo.marca|escapejs }}', 
-                                  'vehiculo'
-                              )">
+                      <button type="button" class="btn btn-sm btn-outline-danger" onclick="confirmarEliminacion({{ vehiculo.id_vehiculo }}, '{{ vehiculo.marca|escapejs }}', 'vehiculo')">
                           <i class="bi bi-trash"></i>
                       </button>
                   </form>
@@ -65,7 +57,7 @@
                 <td colspan="5" class="text-center">No hay vehículos registrados.</td>
               </tr>
             {% endfor %}
-            </tbody>
+          </tbody>
         </table>
       </div>
     </div>

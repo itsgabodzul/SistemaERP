@@ -1,6 +1,8 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from .forms import VehiculoForm
+from django.http import JsonResponse
 from django.db.models import Q
+import requests
 from django.contrib import messages
 from apps.vehiculo.models import m_vehiculo
 from apps.cliente.models import m_cliente
@@ -65,12 +67,14 @@ def editar_vehiculo(request, id_vehiculo):
     vehiculo = get_object_or_404(m_vehiculo, pk=id_vehiculo)
     if request.method == 'POST':
         form = VehiculoForm(request.POST, instance=vehiculo)
+        form.fields['marca'].disabled = True
         if form.is_valid():
             form.save()
             messages.success(request, 'vehiculo|actualizado|Vehiculo actualizado correctamente')
             return redirect('vehiculos')
     else:
         form = VehiculoForm(instance=vehiculo)
+        form.fields['numero_serie'].disabled = True
     return render(request, 'vehiculos/editar_vehiculo.html', {'form': form, 'vehiculo': vehiculo})
 
 @require_POST
@@ -81,3 +85,17 @@ def eliminar_vehiculo(request):
     messages.success(request, 'vehiculo|eliminado|Vehiculo eliminado correctamente')
     return redirect('vehiculos')
 
+
+def obtener_marcas(request):
+    url = "https://vpic.nhtsa.dot.gov/api/vehicles/GetAllMakes?format=json"
+    response = requests.get(url)
+    data = response.json()
+    marca = sorted(set([item["Make_Name"] for item in data["Results"]]))
+    return JsonResponse({"marca": marca})
+
+def obtener_modelos(request, marca):
+    url = f"https://vpic.nhtsa.dot.gov/api/vehicles/GetModelsForMake/{marca}?format=json"
+    response = requests.get(url)
+    data = response.json()
+    modelo = [item["Model_Name"] for item in data["Results"]]
+    return JsonResponse({"modelo": modelo})

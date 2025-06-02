@@ -29,7 +29,6 @@
             </ul>
         </div>
     </div>
-
     <!-- Menú -->
     <nav class="navbar navbar-expand-lg">
         <div class="container-fluid">
@@ -106,6 +105,7 @@
             else if (tipo === 'actualizado') icono = 'success';
             else if (tipo === 'cancelada') icono = 'success';
             else if (tipo === 'eliminado') icono = 'success';
+            else if (tipo === 'info') icono = 'info';
             else if (tipo === 'error') icono = 'error';
 
             Swal.fire({
@@ -168,6 +168,69 @@ $(document).ready(function() {
         });
     });
 </script>
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+  const selectMarca = document.getElementById('marca');
+  const selectModelo = document.getElementById('modelo');
 
+  // Obtener todas las marcas
+  fetch('https://vpic.nhtsa.dot.gov/api/vehicles/GetAllMakes?format=json')
+    .then(response => response.json())
+    .then(data => {
+      const marcas = data.Results;
+
+      // Ordenar por nombre
+      marcas.sort((a, b) => a.Make_Name.localeCompare(b.Make_Name));
+
+      marcas.forEach(marca => {
+        const option = document.createElement('option');
+        option.value = marca.Make_Name;
+        option.textContent = marca.Make_Name;
+        selectMarca.appendChild(option);
+      });
+    })
+    .catch(error => {
+      console.error('Error al cargar marcas:', error);
+    });
+
+  // Al cambiar de marca, obtener modelos
+  selectMarca.addEventListener('change', function () {
+    const marcaSeleccionada = this.value;
+
+    // Limpia modelos anteriores
+    selectModelo.innerHTML = '';
+    selectModelo.disabled = true;
+
+    if (!marcaSeleccionada) return;
+
+    fetch(`https://vpic.nhtsa.dot.gov/api/vehicles/GetModelsForMake/${marcaSeleccionada}?format=json`)
+      .then(response => response.json())
+      .then(data => {
+        const modelos = data.Results;
+
+        if (modelos.length === 0) {
+          const option = document.createElement('option');
+          option.textContent = 'No hay modelos disponibles';
+          selectModelo.appendChild(option);
+        } else {
+          modelos.forEach(modelo => {
+            const option = document.createElement('option');
+            option.value = modelo.Model_Name;
+            option.textContent = modelo.Model_Name;
+            selectModelo.appendChild(option);
+          });
+        }
+
+        selectModelo.disabled = false;
+      })
+      .catch(error => {
+        console.error('Error al cargar modelos:', error);
+        const option = document.createElement('option');
+        option.textContent = 'Error al cargar modelos';
+        selectModelo.appendChild(option);
+      });
+  });
+});
+</script>
 </body>
 </html>
