@@ -35,12 +35,12 @@
               <div class="text-danger">{{ field.errors|striptags }}</div>
               {% endif %}
               {% if field.name == 'cliente' %}
-              <a href="{% url 'agregar_cliente' %}" class="btn btn-outline-primary btn-sm mt-2">
+              <!-- <a href="{% url 'agregar_cliente' %}" class="btn btn-outline-primary btn-sm mt-2">
                 <i class="bi bi-person-plus"></i> Nuevo Cliente
-              </a>
-              <!-- <button type="button" id="btnAgregarCliente" class="btn btn-outline-primary btn-sm mt-2" data-bs-toggle="modal" data-bs-target="#modalAgregarCliente">
+              </a> -->
+              <button type="button" id="btnAgregarCliente" class="btn btn-outline-primary btn-sm mt-2" data-bs-toggle="modal" data-bs-target="#modalAgregarCliente">
                 <i class="bi bi-person-plus"></i> Nuevo Cliente
-              </button> -->
+              </button>
               {% endif %}
           </div>
           {% endfor %}
@@ -58,50 +58,8 @@
 <div class="modal fade" id="modalAgregarCliente" tabindex="-1" aria-labelledby="modalAgregarClienteLabel" aria-hidden="true">
   <div class="modal-dialog modal-lg">
     <div class="modal-content">
+      <div class="modal-body"></div>
     </div>
   </div>
 </div>
-
-<script>
-  $(document).ready(function() {
-    // Cargar el formulario cuando se abre el modal
-    $('#modalAgregarCliente').on('show.bs.modal', function() {
-        var $modal = $(this);
-        $.ajax({
-            url: "{% url 'cliente_modal' %}",
-            method: 'GET',
-            success: function(data) {
-                $modal.find('.modal-body').html(data);
-            },
-            error: function(xhr, status, error) {
-                $modal.find('.modal-body').html(
-                    '<div class="alert alert-danger">Error al cargar el formulario</div>'
-                );
-            }
-        });
-    });
-});
-  // Manejar el envío del formulario del cliente
-  $(document).on('submit', '#formNuevoCliente', function (e) {
-    e.preventDefault();
-    const form = $(this);
-    $.ajax({
-      type: 'POST',
-      url: '{% url "cliente_modal" %}',
-      data: form.serialize(),
-      success: function (data) {
-        if (data.success) {
-          // Insertar el nuevo cliente en el select2
-          const newOption = new Option(data.nombre, data.id, true, true);
-          $('#id_cliente').append(newOption).trigger('change');
-
-          // Cerrar el modal
-          $('#modalAgregarCliente').modal('hide');
-        } else {
-          $('#modalAgregarCliente .modal-content').html(data);
-        }
-      }
-    });
-  });
-</script>
 {% endblock %}

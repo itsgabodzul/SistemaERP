@@ -23,7 +23,6 @@
             <ul class="dropdown-menu dropdown-menu-end">
                 <li><a class="dropdown-item" href="{% url 'perfil' %}"><i class="bi bi-person-fill-gear"></i> Perfil</a></li>
                 <li><a class="dropdown-item" href="{% url 'config' %}"><i class="bi bi-gear-fill"></i> Configuración</a></li>
-                <li><a class="dropdown-item" href="{% url 'help' %}"><i class="bi bi-question-circle-fill"></i> Ayuda</a></li>
                 <li><hr class="dropdown-divider"></li>
                 <li><a class="dropdown-item text-danger" href="#"><i class="bi bi-box-arrow-right"></i> Cerrar Sesión</a></li>
             </ul>
@@ -231,6 +230,49 @@ document.addEventListener('DOMContentLoaded', function () {
       });
   });
 });
+</script>
+<script>
+      $(document).ready(function() {
+    // Cargar el formulario cuando se abre el modal
+    $('#modalAgregarCliente').on('show.bs.modal', function() {
+        var $modal = $(this);
+        $.ajax({
+            url: "{% url 'cliente_modal' %}",
+            method: 'POST',
+            data: {
+                csrfmiddlewaretoken: "{{ csrf_token }}",
+            },
+            success: function(data) {
+                $modal.find('.modal-body').html(data);
+            },
+            error: function(xhr, status, error) {
+                $modal.find('.modal-body').html(
+                    '<div class="alert alert-danger">Error al cargar el formulario</div>'
+                );
+            }
+        });
+    });
+});
+</script>
+<script>
+  // Manejar el envío del formulario del cliente
+  $(document).on('submit', '#formNuevoCliente', function (e) {
+    e.preventDefault();
+    const form = $(this);
+    $.ajax({
+      type: 'POST',
+      url: '{% url "cliente_modal" %}',
+      data: form.serialize(),
+      success: function (data) {
+        if (data.success) {
+          // Cerrar el modal
+          $('#modalAgregarCliente').modal('hide');
+        } else {
+          $('#modalAgregarCliente .modal-content').html(data);
+        }
+      }
+    });
+  });
 </script>
 </body>
 </html>

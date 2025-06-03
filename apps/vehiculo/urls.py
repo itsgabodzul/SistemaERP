@@ -17,4 +17,5 @@ urlpatterns = [
     path('eliminar-vehiculo/', views.eliminar_vehiculo, name='eliminar_vehiculo'),
     path('api/marcas/', views.obtener_marcas, name='api_marcas'),
     path('api/modelos/<str:marca>/', views.obtener_modelos, name='api_modelos'),
+    path('clientes/', include('apps.cliente.urls')),
 ]

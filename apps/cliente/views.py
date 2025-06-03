@@ -77,8 +77,8 @@ def cliente_modal(request):
     if request.method == 'POST':
         form = ClienteForm(request.POST)
         if form.is_valid():
-            cliente = form.save()
-            return JsonResponse({'success': True, 'id_cliente': cliente.id, 'nombre': str(cliente)})
+            form.save()
+            return JsonResponse({'success': True, })
         return render(request, 'clientes/cliente_modal_form.html', {'form': form})
     else:
         form = ClienteForm()

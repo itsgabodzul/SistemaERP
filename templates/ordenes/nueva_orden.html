@@ -3,12 +3,6 @@
 {% block title %}Nueva Orden de Trabajo{% endblock %}
 
 {% block content %}
-<style>
-  .casilla {
-    border: 1px solid;
-    padding: 10px;
-  }
-</style>
 
 <div class="container-fluid">
   <div class="d-flex align-items-center mb-4">
@@ -23,7 +17,9 @@
     <div class="card-body">
       <form method="POST" novalidate>
         {% csrf_token %}
-        {{ form.non_field_errors }}
+        <div class="errores">
+          {{ form.non_field_errors }}
+        </div>
 
         <!-- Orden de trabajo -->
         <div class="row g-3">
@@ -78,6 +74,13 @@
         {{ formset.management_form }}
         <div id="formset-container" class="row g-3">
           {% for form in formset %}
+          {% if form.errors %}
+                <div class="non-field-errors">
+                    {% for error in form.non_field_errors %}
+                        <p class="text-danger">{{ error }}</p>
+                    {% endfor %}
+                </div>
+        {% endif %}
             <div class="formset-form col-md-6">
               <div class="border p-3 rounded shadow-sm bg-light position-relative">
                 <div class="row g-2">

@@ -93,6 +93,9 @@
     border: #6c757d solid;
     padding: 2px 10px;
 }
+.errores ul li{
+    color: red;
+}
 /*Generales*/
 .prueba{
     border: red solid;

@@ -1,21 +1,25 @@
 <div class="modal-header">
-  <h5 class="modal-title">Agregar nuevo cliente</h5>
-  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
-</div>
-<form id="formNuevoCliente" method="post">
+        <h5 class="modal-title">Agregar nuevo cliente</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+      </div>
+<form id="formNuevoCliente" method="post"  novalidate>
   <div class="modal-body">
     {% csrf_token %}
-    {% for field in form %}
-      <div class="mb-3">
-        <label for="{{ field.id_for_label }}" class="form-label">{{ field.label }}</label>
-        {{ field }}
-        {% if field.errors %}
-          <div class="text-danger">{{ field.errors|striptags }}</div>
-        {% endif %}
-      </div>
-    {% endfor %}
+    <div class="row g-3">
+      {% for field in form %}
+        <div class="col-md-4">
+          <label for="{{ field.id_for_label }}" class="form-label">{{ field.label }}</label>
+          {{ field }}
+          {% if field.errors %}
+            <div class="text-danger">{{ field.errors|striptags }}</div>
+          {% endif %}
+        </div>
+      {% endfor %}
+    </div>
   </div>
   <div class="modal-footer">
-    <button type="submit" class="btn btn-primary">Guardar</button>
+    <button type="submit" class="btn btn-success">
+      <i class="bi bi-save me-2"></i>Guardar Cliente
+    </button>
   </div>
 </form>

@@ -6,7 +6,7 @@ class m_inventario(models.Model):
     id_producto = models.AutoField(primary_key = True, db_column='id_producto')
 
     #Campos
-    nombre_p = models.CharField(max_length=250, null=True, verbose_name="Producto")
+    nombre_p = models.CharField(max_length=250, null=True, unique=True, verbose_name="Producto")
     descripcion = models.CharField(max_length=250, null=True, verbose_name="Descripción")
     categoria = models.ForeignKey('Categoria', on_delete=models.SET_NULL, null=True, verbose_name="Categoría")
     stock = models.IntegerField(null=True, verbose_name="Stock")
