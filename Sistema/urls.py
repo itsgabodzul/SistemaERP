@@ -23,13 +23,15 @@ from . import views
 #Inclus para que funcione
 from django.urls import include
 from apps.vehiculo.views import ClienteAutocomplete
+from apps.ordenes.views import VehiculoAutocomplete
 
 
 urlpatterns = [
     path('admin/', admin.site.urls),
 
     #Paginas publicas
-    path('', views.v_login, name = "u_home"),
+    path('login/', views.login_view, name = "u_home"),
+    path('', views.logout_view, name = "logout"),
     path('inicio/', views.p_inicio, name='inicio'),
     path('clientes/', include('apps.cliente.urls')), #Incluir las url de las apps
     path('vehiculos/',include('apps.vehiculo.urls')),
@@ -37,7 +39,12 @@ urlpatterns = [
     path('orden-de-trabajo/', include('apps.ordenes.urls')),
     path('configuracion/perfil/', views.p_perfil, name='perfil'),
     path('configuracion/', views.p_config, name='config'),
-    path('configuracion/ayuda/', views.p_help, name='help'),
     path('cliente-autocomplete/', ClienteAutocomplete.as_view(), name='cliente-autocomplete'),
+    path('vehiculo-autocomplete/', VehiculoAutocomplete.as_view(), name='vehiculo-autocomplete'),
+    path('configuracion/eliminar-categoria', views.eliminar_categoria, name='eliminar_categoria'),
+    path('configuracion/eliminar-servicio', views.eliminar_servicio, name='eliminar_servicio'),
+    path('configuracion/editar-servicio', views.editar_servicio, name='editar_servicio'),
+    path('configuracion/eliminar-empleado', views.eliminar_empleado, name='eliminar_empleado'),
+    path('configuracion/editar-empleado', views.editar_empleado, name='editar_empleado'),
     # path('select2/', include('django_select2.urls')),
 ]

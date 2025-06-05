@@ -55,35 +55,31 @@
       <div class="mt-4">
         {% if orden.estado == 'T' %}
         <h3 class="btn-secondary">Orden Finalizada</h3>
+        {% elif orden.estado == 'C' %}
+        <h3 class="btn-secondary">Orden Cancelada</h3>
         {% else %}
         <a href="#" class="btn btn-primary"><i class="bi bi-pencil-square me-2"></i>Editar Orden</a>
         {% endif %}
+        {% if perms.ordenes.iniciar_orden %}
         {% if orden.estado == 'P' %}
             <a href="{% url 'cambiar_estado' id_orden=orden.id_orden nuevo_estado='E' %}" 
               class="btn btn-success">
                 <i class="bi bi-check2 me-2"></i>Iniciar Orden
             </a>
-            <form method="post" action="{% url 'ver_orden' id_orden=orden.id_orden %}" style="display: inline;">
-            {% csrf_token %}
-            <button type="submit" name="cancelar_orden" class="btn btn-danger"
-                    onclick="return confirm('¿Estás seguro de cancelar esta orden?')">
-                <i class="bi bi-x-lg me-2"></i>Cancelar Orden
-            </button>
-        </form>
         {% elif orden.estado == 'E' %}
             <a href="{% url 'cambiar_estado' id_orden=orden.id_orden nuevo_estado='T' %}" 
               class="btn btn-success">
                 <i class="bi bi-check2 me-2"></i>Terminar Orden
             </a>
-            <form method="post" action="{% url 'ver_orden' id_orden=orden.id_orden %}" style="display: inline;">
+        {% endif %}
+        {% endif %}
+        <form method="post" action="{% url 'ver_orden' id_orden=orden.id_orden %}" style="display: inline;">
             {% csrf_token %}
             <button type="submit" name="cancelar_orden" class="btn btn-danger"
                     onclick="return confirm('¿Estás seguro de cancelar esta orden?')">
                 <i class="bi bi-x-lg me-2"></i>Cancelar Orden
             </button>
         </form>
-        {% endif %}
-
     </div>
     </div>
   </div>

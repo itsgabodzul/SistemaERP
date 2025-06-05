@@ -73,7 +73,11 @@
                 </td>
                 <td>
                   <!-- Botom de Editar -->
+                  {% if orden.estado == 'C'%}
+                  <a href=""></a>
+                  {% else %}
                   <a href="{% url 'editar_orden' orden.id_orden %}" class="btn btn-sm btn-outline-primary"><i class="bi bi-pencil-square"></i></a>
+                  {% endif %}
                 </td>
               </tr>
             {% empty %}

@@ -3,9 +3,24 @@ from django.forms import modelform_factory, inlineformset_factory
 from .models import m_refaccion, m_orden_trabajo, DetalleServicio
 from .forms import OrdenTrabajoForm, RefaccionFormSet, ServicioFormSet
 from django.contrib import messages
+from dal import autocomplete
+from django.contrib.auth.decorators import login_required
+from apps.vehiculo.models import m_vehiculo
 
 
 # Create your views here.
+class VehiculoAutocomplete(autocomplete.Select2QuerySetView):
+    def get_queryset(self):
+        # Todos los clientes al inicio
+        qs = m_vehiculo.objects.all()
+
+        # Si el usuario está buscando algo (self.q = término de búsqueda)
+        if self.q:
+            qs = qs.filter(placas__icontains=self.q).distinct()  # Busca coincidencias en el nombre
+
+        return qs
+
+@login_required
 def p_orden(request):
     estado_filtro = request.GET.get('estado', None)
     # query = request.GET.get('busca_cliente')  # Captura lo que escribió el usuario
@@ -28,6 +43,7 @@ def p_orden(request):
 
 from django.db import transaction
 
+@login_required
 def crear_orden_trabajo(request):
     if request.method == 'POST':
         form = OrdenTrabajoForm(request.POST)
@@ -36,32 +52,27 @@ def crear_orden_trabajo(request):
 
         if form.is_valid() and formset.is_valid() and formset_servicios.is_valid():
             try:
-                with transaction.atomic():  # ¡Todo o nada!
-                    # Guarda la orden (estado Pendiente por defecto)
+                with transaction.atomic():
                     orden = form.save(commit=False)
-                    orden.estado = 'P'  # 'P' de Pendiente (según tu modelo)
-                    orden.save()  # Guarda para obtener PK
+                    orden.estado = 'P'
+                    orden.save()
 
-                    # Procesa las refacciones
                     refacciones = formset.save(commit=False)
                     for refaccion in refacciones:
                         refaccion.orden = orden
-                        refaccion.save()  # Aquí se descuenta del inventario (por el save() de m_refaccion)
+                        refaccion.save()
 
-                    # Procesa los servicios (¡esto faltaba!)
                     servicios = formset_servicios.save(commit=False)
                     for servicio in servicios:
                         servicio.orden = orden
                         servicio.save()
 
-                    # Actualiza el total de la orden (ahora incluye refacciones)
                     orden.total = orden.calcular_total()
                     orden.save()
 
-                    return redirect('orden')  # Redirige a la lista de órdenes
+                    return redirect('orden')
 
             except Exception as e:
-                # Maneja errores (ej: stock insuficiente)
                 form.add_error(None, f"Error al crear la orden: {str(e)}")
 
     else:
@@ -75,7 +86,7 @@ def crear_orden_trabajo(request):
         'formset_servicios': formset_servicios,
     })
 
-
+@login_required
 def ver_orden(request, id_orden):
     orden = get_object_or_404(m_orden_trabajo, pk=id_orden)
     refaccion = m_refaccion.objects.filter(orden=orden)
@@ -115,6 +126,7 @@ def cambiar_estado(request, id_orden, nuevo_estado):
     
     return redirect('ver_orden', id_orden=id_orden)
 
+@login_required
 def editar_orden(request, id_orden):
     orden = get_object_or_404(m_orden_trabajo, pk=id_orden)
 
@@ -134,16 +146,19 @@ def editar_orden(request, id_orden):
     if request.method == 'POST':
         form = OrdenTrabajoForm(request.POST, instance=orden)
 
-        # Deshabilitar el campo de vehículo para que no se edite, pero mostrar
         form.fields['id_vehiculo'].disabled = True
         formset_refacciones = RefaccionFormSet(request.POST, instance=orden, prefix='form')
         formset_servicios = ServicioFormSet(request.POST, instance=orden, prefix='servicio')
 
+        form_valid = form.is_valid()
+        refacciones_valid = formset_refacciones.is_valid()
+        servicios_valid = formset_servicios.is_valid()
+
         if form.is_valid() and formset_refacciones.is_valid() and formset_servicios.is_valid():
-            form.save()  # aunque no puedas editar cliente ni vehículo, guarda otros campos
+            form.save()
             formset_refacciones.save()
             formset_servicios.save()
-            messages.success(request, "Orden actualizada correctamente.")
+            messages.success(request, 'orden|actualizado|Orden actualizada correctamente')
             return redirect('orden')
     else:
         form = OrdenTrabajoForm(instance=orden)

@@ -22,9 +22,12 @@
             </a>
             <ul class="dropdown-menu dropdown-menu-end">
                 <li><a class="dropdown-item" href="{% url 'perfil' %}"><i class="bi bi-person-fill-gear"></i> Perfil</a></li>
+                {% if perms.empleado.add_m_empleado %}
                 <li><a class="dropdown-item" href="{% url 'config' %}"><i class="bi bi-gear-fill"></i> Configuración</a></li>
+                {% endif %}
+
                 <li><hr class="dropdown-divider"></li>
-                <li><a class="dropdown-item text-danger" href="#"><i class="bi bi-box-arrow-right"></i> Cerrar Sesión</a></li>
+                <li><a class="dropdown-item text-danger" href="{% url 'logout' %}"><i class="bi bi-box-arrow-right"></i> Cerrar Sesión</a></li>
             </ul>
         </div>
     </div>
@@ -41,25 +44,33 @@
                             <i class="bi bi-house-fill"></i> Inicio
                         </a>
                     </li>
+                    {% if perms.ordenes.add_m_orden_trabajo %}
                     <li class="nav-item px-2">
                         <a class="nav-link {% if request.resolver_match.url_name == 'orden' %}active{% endif %}" href="{% url 'orden' %}">
                             <i class="bi bi-briefcase-fill"></i> Órdenes de Trabajo
                         </a>
+                    {% endif %}
                     </li>
                     <li class="nav-item px-2">
+                        {% if perms.cliente.add_m_cliente %}
                         <a class="nav-link {% if request.resolver_match.url_name == 'clientes' %}active{% endif %}" href="{% url 'clientes' %}">
                             <i class="bi bi-people-fill"></i> Clientes
                         </a>
+                        {% endif %}
                     </li>
                     <li class="nav-item px-2">
+                        {% if perms.vehiculo.add_m_vehiculo %}
                         <a class="nav-link {% if request.resolver_match.url_name == 'vehiculos' %}active{% endif %}" href="{% url 'vehiculos' %}">
                             <i class="bi bi-car-front-fill"></i> Vehículos
                         </a>
+                        {% endif %}
                     </li>
                     <li class="nav-item px-2">
+                        {% if perms.inventario.add_m_inventario %}
                         <a class="nav-link {% if request.resolver_match.url_name == 'inventario' %}active{% endif %}" href="{% url 'inventario' %}">
                             <i class="bi bi-tools"></i> Inventario
                         </a>
+                        {% endif %}
                     </li>
                 </ul>
             </div>
@@ -129,10 +140,32 @@
 <!-- Inicialización -->
 <script>
 $(document).ready(function() {
-    // Reemplaza 'select2-autocomplete' con la clase de TU campo
     $('.select2-autocomplete').select2({
         ajax: {
-            url: '/cliente-autocomplete/',  // Asegúrate que coincida con tu URL
+            url: '/cliente-autocomplete/',
+            dataType: 'json',
+            delay: 250,
+            data: function(params) {
+                return { q: params.term };
+            },
+            processResults: function(data) {
+                return {
+                    results: data.results,
+                    pagination: data.pagination
+                };
+            }
+        },
+        minimumInputLength: 2,
+        placeholder: ' ',
+        allowClear: true
+    });
+});
+</script>
+<script>
+$(document).ready(function() {
+    $('.select2-autocomplete-placas').select2({
+        ajax: {
+            url: '/vehiculo-autocomplete/',
             dataType: 'json',
             delay: 250,
             data: function(params) {
@@ -158,7 +191,6 @@ $(document).ready(function() {
 
         rows.forEach(row => {
         row.addEventListener("click", function(e) {
-            // Evita que se active si haces clic en un botón dentro de la fila
             if (e.target.tagName === 'A' || e.target.tagName === 'BUTTON' || e.target.closest('form')) {
             return;
             }
@@ -232,8 +264,7 @@ document.addEventListener('DOMContentLoaded', function () {
 });
 </script>
 <script>
-      $(document).ready(function() {
-    // Cargar el formulario cuando se abre el modal
+    $(document).ready(function() {
     $('#modalAgregarCliente').on('show.bs.modal', function() {
         var $modal = $(this);
         $.ajax({
@@ -255,7 +286,6 @@ document.addEventListener('DOMContentLoaded', function () {
 });
 </script>
 <script>
-  // Manejar el envío del formulario del cliente
   $(document).on('submit', '#formNuevoCliente', function (e) {
     e.preventDefault();
     const form = $(this);

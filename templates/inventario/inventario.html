@@ -44,7 +44,7 @@
               <th><i class="bi bi-layers-fill"></i> Categoría</th>
               <th><i class="bi bi-inboxes-fill"></i> Stock</th>
               <th><i class="bi bi-coin"></i> Precio</th>
-              <th><i class="bi bi-gear-fill"></i> Acciones</th>
+              <th></th>
             </tr>
           </thead>
           <tbody>
@@ -69,6 +69,7 @@
                   <!-- Botom de Editar -->
                   <a href="{% url 'editar_producto' producto.id_producto %}" class="btn btn-sm btn-outline-primary"><i class="bi bi-pencil-square"></i></a>
                   <!-- Botón de eliminar -->
+                  {% if perms.inventario.delete_m_inventario %}
                   <form id="form-eliminar-{{ producto.id_producto }}" method="POST" action="{% url 'eliminar_producto' %}" style="display: inline;">
                       {% csrf_token %}
                       <input type="hidden" name="id_producto" value="{{ producto.id_producto }}">
@@ -82,6 +83,7 @@
                           <i class="bi bi-trash"></i>
                       </button>
                   </form>
+                  {% endif %}
                 </td>
               </tr>
             {% empty %}

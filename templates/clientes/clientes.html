@@ -33,7 +33,7 @@
               <th scope="col"><i class="bi bi-envelope-fill"></i> Correo</th>
               <th scope="col"><i class="bi bi-phone-fill"></i> Teléfono</th>
               <th scope="col"><i class="bi bi-geo-alt-fill"></i> Dirección</th>
-              <th scope="col"><i class="bi bi-gear-fill"></i> Acciones</th>
+              <th scope="col"></th>
             </tr>
           </thead>
           <!-- Filas de contenido -->
@@ -48,11 +48,13 @@
                 <!-- Botom de Editar -->
                 <a href="{% url 'editar_cliente' cliente.id_cliente %}" class="btn btn-sm btn-outline-primary"><i class="bi bi-pencil-square"></i></a>
                 <!-- Botón de eliminar -->
+                {% if perms.cliente.delete_m_cliente %}
                 <form id="form-eliminar-{{ cliente.id_cliente }}" method="POST" action="{% url 'eliminar_cliente' %}" style="display: inline;">
                   {% csrf_token %}
                   <input type="hidden" name="id_cliente" value="{{ cliente.id_cliente }}">
                   <button type="button"class="btn btn-sm btn-outline-danger" onclick="confirmarEliminacion({{ cliente.id_cliente }}, '{{ cliente.nombre|escapejs }}', 'cliente')"><i class="bi bi-trash"></i></button>
                 </form>
+                {% endif %}
               </td>
             </tr>
           {% empty %}

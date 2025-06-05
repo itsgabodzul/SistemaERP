@@ -1,5 +1,6 @@
 from django import forms
 from .models import m_orden_trabajo, m_refaccion, DetalleServicio
+from dal import autocomplete
 from django.forms import modelformset_factory
 
 
@@ -22,7 +23,7 @@ class OrdenTrabajoForm(forms.ModelForm):
             'mecanico', 'diagnostico'
         ]
         widgets = {
-            'id_vehiculo': forms.Select(attrs={'class': 'form-select casilla'}),
+            'id_vehiculo': autocomplete.ModelSelect2(url='vehiculo-autocomplete', attrs={'class': 'form-select casilla select2-autocomplete-placas'}),
             'entrega_estimada': forms.DateInput(attrs={'type': 'date', 'class': 'form-control casilla'}),
             'mecanico': forms.Select(attrs={'class': 'form-select casilla'}),
             'diagnostico': forms.Textarea(attrs={'class': 'form-control casilla', 'rows': 3}),

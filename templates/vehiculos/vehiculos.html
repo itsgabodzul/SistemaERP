@@ -29,7 +29,7 @@
               <th><i class="bi bi-person-fill"></i> Cliente</th>
               <th><i class="bi bi-truck-front"></i> Modelo</th>
               <th><i class="bi bi-calendar-event-fill"></i> Año</th>
-              <th><i class="bi bi-gear-fill"></i> Acciones</th>
+              <th></th>
             </tr>
           </thead>
           <tbody>
@@ -43,6 +43,7 @@
                   <!-- Botom de Editar -->
                   <a href="{% url 'editar_vehiculo' vehiculo.id_vehiculo %}" class="btn btn-sm btn-outline-primary"><i class="bi bi-pencil-square"></i></a>
                   <!-- Botón de eliminar -->
+                   {% if perms.vehiculo.delete_m_vehiculo %}
                   <form id="form-eliminar-{{ vehiuclo.id_vehiculo }}" method="POST" action="{% url 'eliminar_vehiculo' %}" style="display: inline;">
                       {% csrf_token %}
                       <input type="hidden" name="id_vehiculo" value="{{ vehiculo.id_vehiculo }}">
@@ -50,6 +51,7 @@
                           <i class="bi bi-trash"></i>
                       </button>
                   </form>
+                  {% endif %}
                 </td>
               </tr>
             {% empty %}

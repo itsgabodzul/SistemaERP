@@ -42,6 +42,9 @@
       {% endif %}
     </div>
     {% endfor %}
+    <input type="hidden" name="marca" value="{{ form.marca.value }}">
+    <input type="hidden" name="modelo" value="{{ form.modelo.value }}">
+    <input type="hidden" name="numero_serie" value="{{ form.numero_serie.value }}">
   </div>
   <div class="mt-4 d-flex justify-content-end">
     <button type="submit" class="btn btn-success">

@@ -20,7 +20,6 @@
         {% csrf_token %}
         {{ form.non_field_errors }}
         <div class="row g-3">
-          <!-- Campos editables -->
           {% for field in form %}
             {% if field.name != 'cliente' and field.name != 'vehiculo' %}
               <div class="col-md-6">
@@ -30,13 +29,14 @@
                   <input type="date" name="{{ field.name }}" id="{{ field.id_for_label }}" value="{{ field.value|date:'Y-m-d' }}" class="form-control casilla">
                   {% else %}
                     {{ field|add_class:"form-control" }}
-                  {% endif %}
+                {% endif %}
                 {% if field.errors %}
                   <div class="text-danger">{{ field.errors|striptags }}</div>
                 {% endif %}
               </div>
             {% endif %}
           {% endfor %}
+          <input type="hidden" name="id_vehiculo" value="{{ form.id_vehiculo.value }}">
         </div>
 
         <!-- Servicios -->
@@ -48,27 +48,30 @@
             <div class="formset-form-servicios col-md-6">
               <div class="border p-3 rounded shadow-sm bg-light position-relative">
                 <div class="row g-2">
+                  {{ form.id }}
                   {% for field in form.visible_fields %}
                     {% if field.name != 'DELETE' %}
                       <div class="col-12">
                         <label for="{{ field.id_for_label }}" class="form-label small">{{ field.label }}</label>
                         {{ field|add_class:"form-select form-select-sm" }}
-                        {% if field.errors %}
-                          <div class="text-danger small">{{ field.errors|striptags }}</div>
+                        {% if form.non_field_errors %}
+                          <div class="text-danger">
+                            {{ form.non_field_errors }}
+                          </div>
                         {% endif %}
                       </div>
                     {% endif %}
                   {% endfor %}
                 </div>
-                <button type="button" class="btn btn-sm btn-outline-danger position-absolute top-0 end-0 m-2 remove-servicio">
-                  <i class="bi bi-x-circle"></i>
+                <button type="button" class="btn btn-sm btn-danger position-absolute top-0 end-0 m-2 remove-servicio">
+                  <i class="bi bi-x" style="color: white;"></i>
                 </button>
               </div>
             </div>
           {% endfor %}
         </div>
         <div class="my-3">
-          <button type="button" class="btn btn-outline-secondary" id="add-servicio">
+          <button type="button" class="btn btn-secondary" id="add-servicio">
             <i class="bi bi-plus-lg me-1"></i>Agregar servicio
           </button>
         </div>
@@ -82,27 +85,30 @@
             <div class="formset-form col-md-6">
               <div class="border p-3 rounded shadow-sm bg-light position-relative">
                 <div class="row g-2">
+                  {{ form.id }} 
                   {% for field in form.visible_fields %}
                     {% if field.name != 'DELETE' %}
                       <div class="col-12">
                         <label for="{{ field.id_for_label }}" class="form-label small">{{ field.label }}</label>
                         {{ field|add_class:"form-select form-select-sm" }}
-                        {% if field.errors %}
-                          <div class="text-danger small">{{ field.errors|striptags }}</div>
+                        {% if form.non_field_errors %}
+                          <div class="text-danger">
+                            {{ form.non_field_errors }}
+                          </div>
                         {% endif %}
                       </div>
                     {% endif %}
                   {% endfor %}
                 </div>
-                <button type="button" class="btn btn-sm btn-outline-danger position-absolute top-0 end-0 m-2 remove-refaccion">
-                  <i class="bi bi-x-circle"></i>
+                <button type="button" class="btn btn-sm btn-danger position-absolute top-0 end-0 m-2 remove-refaccion">
+                  <i class="bi bi-x" style="color: white;"></i>
                 </button>
               </div>
             </div>
           {% endfor %}
         </div>
         <div class="my-3">
-          <button type="button" class="btn btn-outline-secondary" id="add-refaccion">
+          <button type="button" class="btn btn-secondary" id="add-refaccion">
             <i class="bi bi-plus-lg me-1"></i>Agregar refacción
           </button>
         </div>

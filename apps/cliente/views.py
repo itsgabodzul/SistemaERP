@@ -6,10 +6,12 @@ from django.views.decorators.http import require_POST
 from django.contrib import messages
 from django.db.models import Q
 from django.http import JsonResponse
+from django.contrib.auth.decorators import login_required
 
 #Definir las vistas de cada pagina
 
 #Página de clientes (index)
+@login_required
 def p_cliente(request):
     query = request.GET.get('busca_cliente')  # Captura lo que escribió el usuario
     clientes = m_cliente.objects.all().order_by('-date_created')
@@ -29,6 +31,7 @@ def p_cliente(request):
     return render(request, 'clientes/clientes.html', context)
 
 #Página de Agregar Cliente
+@login_required
 def agregar_cliente(request):
     if request.method == 'POST':
         form = ClienteForm(request.POST) #Para guardar un formulario
@@ -42,6 +45,7 @@ def agregar_cliente(request):
     return render(request, 'clientes/agregar.html',  {'form': form}) #Renderizar la página desde la plantila
 
 #Página de Editar Cliente
+@login_required
 def editar_cliente(request, id_cliente):
     cliente = get_object_or_404(m_cliente, pk=id_cliente)
     if request.method == 'POST':
@@ -55,6 +59,7 @@ def editar_cliente(request, id_cliente):
     return render(request, 'clientes/editar.html', {'form': form, 'cliente': cliente})
 
 #Página de Ver Cliente
+@login_required
 def ver_cliente(request, id_cliente):
     cliente = get_object_or_404(m_cliente, pk=id_cliente) #Para pasar la id
 

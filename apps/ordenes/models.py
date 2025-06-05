@@ -47,26 +47,19 @@ class m_orden_trabajo(models.Model):
         verbose_name_plural = "Órdenes de trabajo"
         constraints = [
             models.UniqueConstraint(
-                fields=['id_vehiculo','fecha_creacion'],
-                name='unique_orden_vehiculo_dia'
-            ),
-            models.UniqueConstraint(
                 fields=['id_vehiculo'],
                 condition=models.Q(estado__in=['P', 'E']),
                 name='unique_orden_activa_vehiculo'
             )
+        ]
+        permissions = [
+            ("iniciar_orden", "Puede iniciar orden")
         ]
 
     def __str__(self):
         return f"Orden #{self.id_orden} - {self.id_vehiculo}"
 
     def clean(self):
-        if m_orden_trabajo.objects.filter(
-            id_vehiculo=self.id_vehiculo,
-            fecha_creacion=self.fecha_creacion
-        ).exclude(pk=self.pk).exists():
-            raise ValidationError('¡Ya existe una orden idéntica para este vehículo!')
-
         if self.estado in ['P', 'E'] and m_orden_trabajo.objects.filter(
             id_vehiculo=self.id_vehiculo,
             estado__in=['P', 'E']
@@ -124,15 +117,30 @@ class m_refaccion(models.Model):
         verbose_name_plural = "Detalles de refacciones"
 
     def clean(self):
-        if self.producto.stock == 0:
-            raise ValidationError(
-                f'Stock insuficiente. No hay unidades de {self.producto.nombre_p}'
-            )
-        if self.producto.stock < self.cantidad:
-            raise ValidationError(
-                f'Stock insuficiente. Solo hay {self.producto.stock} unidades de {self.producto.nombre_p}'
-            )
-        
+        if not self.producto:
+            return  # Seguridad
+
+        # Cantidad actual registrada en la base de datos
+        cantidad_actual = 0
+        if self.pk:
+            try:
+                cantidad_actual = m_refaccion.objects.get(pk=self.pk).cantidad
+            except m_refaccion.DoesNotExist:
+                cantidad_actual = 0
+
+        # Calcula el cambio neto de stock
+        diferencia = self.cantidad - cantidad_actual
+
+        if diferencia > 0:  # Solo validamos si se va a usar más
+            if self.producto.stock == 0:
+                raise ValidationError(
+                    f'Stock insuficiente. No hay unidades de {self.producto.nombre_p}'
+                )
+            if self.producto.stock < diferencia:
+                raise ValidationError(
+                    f'Stock insuficiente. Solo hay {self.producto.stock} unidades de {self.producto.nombre_p}'
+                )
+            
     def save(self, *args, **kwargs):
         self.full_clean()
         is_new = not self.pk

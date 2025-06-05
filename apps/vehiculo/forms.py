@@ -28,7 +28,7 @@ class VehiculoForm(forms.ModelForm):
             'placas': forms.TextInput(attrs={'class': 'form-control casilla'}),
             'observaciones': forms.TextInput(attrs={'class': 'form-control casilla'}),
             # 'cliente': forms.Select(attrs={'class': 'form-select casilla'}),
-            'cliente': autocomplete.ModelSelect2(url='cliente-autocomplete', attrs={'class': 'form-select casilla select2-autocomplete prueba'}),
+            'cliente': autocomplete.ModelSelect2(url='cliente-autocomplete', attrs={'class': 'form-select casilla select2-autocomplete'}),
         }
 
     # Validaciones personalizadas

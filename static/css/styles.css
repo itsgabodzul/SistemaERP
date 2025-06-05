@@ -96,6 +96,10 @@
 .errores ul li{
     color: red;
 }
+.bordes{
+    border: #343a40 1px solid;
+}
+
 /*Generales*/
 .prueba{
     border: red solid;

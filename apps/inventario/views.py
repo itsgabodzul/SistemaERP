@@ -8,10 +8,12 @@ from apps.inventario.models import m_inventario, MovimientoInventario, Categoria
 from .forms import ExcelUploadForm
 import openpyxl
 import os
+from django.contrib.auth.decorators import login_required
 
 # Create your views here.
 from django.db.models import Q
 
+@login_required
 def p_productos(request):
     # Valores iniciales
     stock_minimo = 5  # Puedes hacer esto configurable como vimos antes
@@ -45,7 +47,7 @@ def p_productos(request):
     }
     return render(request, 'inventario/inventario.html', context)
 
-
+@login_required
 def agregar_producto(request):
     if request.method == 'POST':
         form = InventarioForm(request.POST) #Para guardar un formulario
@@ -58,10 +60,12 @@ def agregar_producto(request):
 
     return render(request, 'inventario/agregar_producto.html',  {'form': form})
 
+@login_required
 def ver_producto(request, id_producto):
     producto = get_object_or_404(m_inventario, pk=id_producto) #Para pasar la id
     return render(request, 'inventario/ver_producto.html', {'producto': producto})
 
+@login_required
 def editar_producto(request, id_producto):
     producto = get_object_or_404(m_inventario, pk=id_producto)
     if request.method == 'POST':
