@@ -2,14 +2,25 @@ from django import forms
 from .models import m_orden_trabajo, m_refaccion, DetalleServicio
 from dal import autocomplete
 from django.forms import modelformset_factory
-
+from django.contrib.auth.models import User, Group
 
 class OrdenTrabajoForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         # Etiqueta vacía para selects
         self.fields['id_vehiculo'].empty_label = "Selecciona un vehículo"
-        self.fields['mecanico'].empty_label = "Selecciona un mecánico (opcional)"
+        self.fields['mecanico'].empty_label = "Selecciona un mecánico"
+
+        try:
+            grupo_empleado = Group.objects.get(name="Mecanico")
+            self.fields['mecanico'].label_from_instance = lambda obj: f"{obj.first_name} {obj.last_name}"  # Usa el nombre real del grupo
+            self.fields['mecanico'].queryset = User.objects.filter(
+                groups=grupo_empleado,
+                is_active=True,
+                is_superuser=False
+            )
+        except Group.DoesNotExist:
+            self.fields['mecanico'].queryset = User.objects.none()
 
         for field in self.fields:
             if field != 'entrega_estimada':  # Permitir nulo en entrega_estimada

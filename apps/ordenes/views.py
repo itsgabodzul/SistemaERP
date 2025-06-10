@@ -6,6 +6,7 @@ from django.contrib import messages
 from dal import autocomplete
 from django.contrib.auth.decorators import login_required
 from apps.vehiculo.models import m_vehiculo
+from django.contrib.auth.models import Group, User
 
 
 # Create your views here.
@@ -134,13 +135,13 @@ def editar_orden(request, id_orden):
     RefaccionFormSet = inlineformset_factory(
         m_orden_trabajo, m_refaccion,
         fields=('producto', 'cantidad'),
-        extra=0, can_delete=True
+        extra=1, can_delete=True
     )
     
     ServicioFormSet = inlineformset_factory(
         m_orden_trabajo, DetalleServicio,
         fields=('servicio',),
-        extra=0, can_delete=True
+        extra=1, can_delete=True
     )
 
     if request.method == 'POST':
@@ -158,6 +159,7 @@ def editar_orden(request, id_orden):
             form.save()
             formset_refacciones.save()
             formset_servicios.save()
+            orden.save()
             messages.success(request, 'orden|actualizado|Orden actualizada correctamente')
             return redirect('orden')
     else:

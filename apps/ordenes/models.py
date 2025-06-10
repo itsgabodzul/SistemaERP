@@ -2,7 +2,7 @@ from django.db import models
 from django.utils import timezone
 from apps.inventario.models import m_inventario, MovimientoInventario
 from apps.vehiculo.models import m_vehiculo
-from apps.empleado.models import m_empleado
+from django.contrib.auth.models import User
 from django.core.exceptions import ValidationError
 
 # Create your models here.
@@ -35,7 +35,7 @@ class m_orden_trabajo(models.Model):
     id_vehiculo = models.ForeignKey(m_vehiculo, on_delete=models.PROTECT, verbose_name="Vehículo")
     fecha_creacion = models.DateField(auto_now_add=True, verbose_name="Fecha de creación")
     entrega_estimada = models.DateField(null=True, blank=True, verbose_name="Fecha estimada de entrega")
-    mecanico = models.ForeignKey(m_empleado, on_delete=models.SET_NULL, null=True, blank=True,
+    mecanico = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True,
     verbose_name="Mecánico asignado")
     diagnostico = models.TextField(verbose_name="Diagnóstico inicial")
     estado = models.CharField(max_length=1, choices=ESTADO_CHOICES, default='P', verbose_name="Estado de la orden")

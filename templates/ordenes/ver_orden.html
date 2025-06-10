@@ -18,10 +18,10 @@
       <p><strong>Fecha :</strong> {{ orden.fecha_creacion }}</p>
       <p><strong>Entrega :</strong> {{ orden.entrega_estimada }}</p>
       <p><strong>Servicio:</strong></p>
-      {% if servicio %}
-      {% for servicio in servicios %}
+      {% if servicios %}
+      {% for servicios in servicios %}
         <ul>
-          <li>{{ servicio.servicio }}</li>
+          <li>{{ servicios.servicio }}</li>
         </ul>
       {% endfor %}
       {% else %}
@@ -54,12 +54,11 @@
       <p><strong>Total:</strong> ${{ orden.total }}</p>
       <div class="mt-4">
         {% if orden.estado == 'T' %}
-        <h3 class="btn-secondary">Orden Finalizada</h3>
+        <h3 class="text-success">Orden Finalizada</h3>
         {% elif orden.estado == 'C' %}
-        <h3 class="btn-secondary">Orden Cancelada</h3>
+        <h3 class="text-danger">Orden Cancelada</h3>
         {% else %}
-        <a href="#" class="btn btn-primary"><i class="bi bi-pencil-square me-2"></i>Editar Orden</a>
-        {% endif %}
+        <a href="{% url 'editar_orden' orden.id_orden %}" class="btn btn-primary"><i class="bi bi-pencil-square me-2"></i>Editar Orden</a>
         {% if perms.ordenes.iniciar_orden %}
         {% if orden.estado == 'P' %}
             <a href="{% url 'cambiar_estado' id_orden=orden.id_orden nuevo_estado='E' %}" 
@@ -80,6 +79,7 @@
                 <i class="bi bi-x-lg me-2"></i>Cancelar Orden
             </button>
         </form>
+        {% endif %}
     </div>
     </div>
   </div>
